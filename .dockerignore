@@ -1,0 +1,13 @@
+**/bin/
+**/obj/
+**/TestResults/
+RaceDay.Api.test/
+.git/
+.gitignore
+.vs/
+.vscode/
+*.user
+*.suo
+RaceDay.Mvc/wwwroot/uploads/
+wwwroot/uploads/*
+docs/*.png
