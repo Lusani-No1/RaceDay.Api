@@ -1,7 +1,6 @@
-@RaceDay.Api_HostAddress = http://localhost:5025/swagger
+@RaceDay.Api_HostAddress = http://localhost:5062
 
-
-GET {{RaceDay.Api_HostAddress}}/weatherforecast/
+GET {{RaceDay.Api_HostAddress}}/api/events
 Accept: application/json
 
 ###
