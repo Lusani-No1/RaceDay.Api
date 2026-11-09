@@ -354,6 +354,22 @@ Image rules: JPEG, PNG or WebP, maximum 5 MB. The API validates the content type
 
 Events without an uploaded banner fall back to one of the bundled RaceDay banner images in `wwwroot/images/event-banners`, served by the API.
 
+Verification with the Azurite storage emulator
+
+The Azure provider was run end-to-end against [Azurite](https://learn.microsoft.com/azure/storage/common/storage-use-azurite), the official Azure Storage emulator:
+
+```text
+POST /api/events/10/banner   (as demo.organiser)
+-> bannerUrl: http://127.0.0.1:10000/devstoreaccount1/raceday/event-banners/<guid>.jpg
+
+GET <bannerUrl>
+-> 200 OK, image/jpeg
+```
+
+`AzureBlobFileStorage` created the `raceday` container, uploaded the file and returned the blob URL, which was then saved on the event and served by Blob Storage. A real Azure Storage account uses exactly the same code path; only the connection string and container name change.
+
+![Azure Blob Storage serving an uploaded event banner](docs/screenshots/azure-blob-storage.jpg)
+
 Docker
 
 Build and run the whole stack with one command from the repository root:
