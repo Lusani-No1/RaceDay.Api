@@ -1,0 +1,35 @@
+# RaceDay - optional Azure Blob Storage demonstration.
+#
+# Runs the official Azurite storage emulator and points the API at it, so the
+# Azure Blob Storage code path can be shown without an Azure subscription:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.azure.yml up -d
+#
+# Then open http://localhost:8081, upload a banner as the organiser, and read the
+# blob straight from Azurite at http://localhost:10000.
+#
+# Azurite uses the well-known development account. This connection string is the
+# public emulator key and must never be used against a real Azure account.
+
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    command: azurite-blob --blobHost 0.0.0.0 --skipApiVersionCheck
+    ports:
+      - "10000:10000"
+    volumes:
+      - raceday-azurite:/data
+
+  api:
+    depends_on:
+      - azurite
+    environment:
+      Storage__Provider: Azure
+      Storage__Azure__ConnectionString: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
+      Storage__Azure__ContainerName: raceday
+      # The browser cannot resolve the compose hostname, so the public URL uses
+      # the published Azurite port instead.
+      Storage__Azure__PublicBaseUrl: "http://localhost:10000/devstoreaccount1/raceday"
+
+volumes:
+  raceday-azurite:
