@@ -5,6 +5,7 @@ using RaceDay.Api.Data;
 using RaceDay.Api.Dtos;
 using RaceDay.Api.Extensions;
 using RaceDay.Api.Models;
+using RaceDay.Api.Services;
 using AppUser = RaceDay.Api.Models.User;
 
 namespace RaceDay.Api.Controllers;
@@ -15,8 +16,13 @@ namespace RaceDay.Api.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly IFileStorage _storage;
 
-    public UsersController(AppDbContext db) => _db = db;
+    public UsersController(AppDbContext db, IFileStorage storage)
+    {
+        _db = db;
+        _storage = storage;
+    }
 
     /// <summary>Returns the logged-in user's details and profile.</summary>
     /// <response code="200">Success.</response>
@@ -62,6 +68,38 @@ public class UsersController : ControllerBase
         user.Profile.ProfileImageUrl = request.ProfileImageUrl;
 
         await _db.SaveChangesAsync();
+        return Ok(ToResponse(user));
+    }
+
+    /// <summary>Uploads or replaces the logged-in user's profile picture.</summary>
+    /// <response code="200">Success. The updated profile is returned.</response>
+    /// <response code="400">The image is missing, too large, or not a supported type.</response>
+    /// <response code="401">Not logged in.</response>
+    [HttpPost("me/profile-picture")]
+    [RequestSizeLimit(6_000_000)]
+    [ProducesResponseType(typeof(ProfileResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> UploadProfilePicture(IFormFile file, CancellationToken ct)
+    {
+        var validationError = ImageUpload.Validate(file);
+        if (validationError is not null)
+            return Problem(title: validationError, statusCode: StatusCodes.Status400BadRequest);
+
+        var id = User.GetUserId();
+        var user = await _db.Users.Include(u => u.Profile).FirstOrDefaultAsync(u => u.UserId == id);
+        if (user is null) return Unauthorized();
+
+        await using var stream = file.OpenReadStream();
+        var url = await _storage.SaveAsync(stream, file.FileName, file.ContentType!, "profile-pictures", ct);
+
+        if (!string.IsNullOrWhiteSpace(user.Profile?.ProfileImageUrl))
+            await _storage.DeleteAsync(user.Profile.ProfileImageUrl, ct);
+
+        user.Profile ??= new UserProfile();
+        user.Profile.ProfileImageUrl = url;
+        await _db.SaveChangesAsync();
+
         return Ok(ToResponse(user));
     }
 
