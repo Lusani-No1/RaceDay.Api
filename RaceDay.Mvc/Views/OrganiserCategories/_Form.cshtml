@@ -1,0 +1,34 @@
+@model CategoryFormViewModel
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" placeholder="e.g. Half Marathon · Open" />
+    <span asp-validation-for="Name" class="text-danger small"></span>
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6">
+        <label asp-for="DistanceKm" class="form-label"></label>
+        <input asp-for="DistanceKm" class="form-control" type="number" step="0.01" min="0.01" />
+        <span asp-validation-for="DistanceKm" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" />
+        <span asp-validation-for="Price" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="MinAge" class="form-label"></label>
+        <input asp-for="MinAge" class="form-control" type="number" min="0" max="120" />
+        <span asp-validation-for="MinAge" class="text-danger small"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="MaxAge" class="form-label"></label>
+        <input asp-for="MaxAge" class="form-control" type="number" min="0" max="120" />
+        <span asp-validation-for="MaxAge" class="text-danger small"></span>
+    </div>
+</div>
+
+<div class="alert alert-light border small">
+    A category needs a distance, an age limit, or both. Leave age fields blank for an open category.
+</div>
