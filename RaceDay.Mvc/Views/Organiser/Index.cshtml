@@ -1,0 +1,102 @@
+@model OrganiserDashboardViewModel
+@{
+    ViewData["Title"] = "Organiser dashboard";
+    var today = DateOnly.FromDateTime(DateTime.Today);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <div class="rd-kicker">Organiser control centre</div>
+        <h1 class="h2 rd-section-title mb-1">Welcome back, @User.GetFullName()</h1>
+        <p class="text-muted mb-0">Track entries, manage categories and capture results.</p>
+    </div>
+    <a class="btn btn-primary" asp-controller="OrganiserEvents" asp-action="Create">Create event</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="rd-stat-card">
+            <div class="rd-stat-value">@Model.TotalEvents</div>
+            <div class="rd-stat-label">Events you organise</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="rd-stat-card">
+            <div class="rd-stat-value">@Model.UpcomingEvents</div>
+            <div class="rd-stat-label">Upcoming events</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="rd-stat-card">
+            <div class="rd-stat-value">@Model.TotalEnrolments</div>
+            <div class="rd-stat-label">Total enrolments</div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <h2 class="h4 rd-section-title mb-0">Your events</h2>
+    <a class="small fw-semibold" asp-controller="OrganiserEvents" asp-action="Index">Manage all events</a>
+</div>
+
+@if (Model.Events.Count == 0)
+{
+    <div class="rd-empty-state">
+        <h3 class="h4">You have not created an event yet</h3>
+        <p class="text-muted mb-3">Create your first event, add categories and start taking entries.</p>
+        <a class="btn btn-primary" asp-controller="OrganiserEvents" asp-action="Create">Create an event</a>
+    </div>
+}
+else
+{
+    <div class="rd-table">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Enrolments</th>
+                    <th>Status</th>
+                    <th class="text-end">Manage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var summary in Model.Events)
+                {
+                    var ev = summary.Event;
+                    <tr>
+                        <td>
+                            <a class="fw-semibold" asp-controller="Events" asp-action="Details"
+                               asp-route-id="@ev.EventId">@ev.Name</a>
+                            <div class="text-muted small">@ev.Location</div>
+                        </td>
+                        <td>@ev.EventDate.ToString("dd MMM yyyy")</td>
+                        <td>@ViewHelpers.EventTypeIcon(ev.EventType) @ev.EventType</td>
+                        <td><span class="rd-chip">@summary.EnrolmentCount</span></td>
+                        <td>
+                            @if (ev.EventDate >= today)
+                            {
+                                <span class="badge bg-success">Upcoming</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-dark">Completed</span>
+                            }
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <a class="btn btn-outline-primary" asp-controller="OrganiserCategories"
+                                   asp-action="Index" asp-route-eventId="@ev.EventId">Categories</a>
+                                <a class="btn btn-outline-primary" asp-controller="OrganiserEnrolments"
+                                   asp-action="Index" asp-route-eventId="@ev.EventId">Enrolments</a>
+                                <a class="btn btn-outline-primary" asp-controller="OrganiserResults"
+                                   asp-action="Index" asp-route-eventId="@ev.EventId">Results</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
