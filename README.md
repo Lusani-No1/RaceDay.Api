@@ -346,6 +346,18 @@ To use Azure:
    Storage__Azure__PublicBaseUrl=
    ```
 
+   For a local demonstration, the repository ships `docker-compose.azure.yml`. It
+   starts the Azurite storage emulator and switches the API to the Azure provider
+   in one command:
+
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose.azure.yml up -d
+   ```
+
+   Uploaded banners and profile pictures then go to blob storage at
+   `http://localhost:10000`. Return to the local provider with
+   `docker compose up -d api`.
+
 3. Upload a banner as an Organiser or a profile picture as any user. The API stores the image in the container and saves its public URL.
 
 With the default local provider, images are stored in `wwwroot/uploads` in the API project and served by `UseStaticFiles`. In Docker this folder is a named volume (`raceday-uploads`), so uploads survive container restarts.
@@ -475,9 +487,14 @@ On Linux, add `--add-host=host.docker.internal:host-gateway` to the `docker run`
 
 ### Part 3 video
 
-_[Insert link]_
+_[Insert link — unlisted YouTube]_
 
-The recording checklist is in `docs/Video_Walkthrough.md`.
+The recording is produced from three documents:
+
+- `docs/Part3_Narration.md` — the full spoken script, section by section.
+- `docs/Part3_Recording_Plan.md` — OBS setup, clip list, exact file and line
+  cues, and the CapCut edit sheet.
+- `docs/Video_Walkthrough.md` — the short assessment-mapped running order.
 
 
 ## AI use disclosure
