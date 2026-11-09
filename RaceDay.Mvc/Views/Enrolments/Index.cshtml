@@ -1,0 +1,76 @@
+@model List<EnrolmentDto>
+@{
+    ViewData["Title"] = "My enrolments";
+    var today = DateOnly.FromDateTime(DateTime.Today);
+    var enrolments = Model
+        .OrderBy(e => e.EventDate < today)
+        .ThenBy(e => e.EventDate)
+        .ToList();
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <div class="rd-kicker">Your entries</div>
+        <h1 class="h2 rd-section-title mb-1">My enrolments</h1>
+        <p class="text-muted mb-0">Every event you have entered, including cancelled entries.</p>
+    </div>
+    <a class="btn btn-primary" asp-controller="Events" asp-action="Index">Find another event</a>
+</div>
+
+@if (enrolments.Count == 0)
+{
+    <div class="rd-empty-state">
+        <h3 class="h4">No enrolments yet</h3>
+        <p class="text-muted mb-3">Pick an event and choose a category to get started.</p>
+        <a class="btn btn-primary" asp-controller="Events" asp-action="Index">Browse events</a>
+    </div>
+}
+else
+{
+    <div class="rd-table">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Category</th>
+                    <th>Event date</th>
+                    <th>Enrolled</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrolment in enrolments)
+                {
+                    <tr>
+                        <td>
+                            <a class="fw-semibold" asp-controller="Events" asp-action="Details"
+                               asp-route-id="@enrolment.EventId">@enrolment.EventName</a>
+                        </td>
+                        <td>@enrolment.CategoryName</td>
+                        <td>@enrolment.EventDate.ToString("dd MMM yyyy")</td>
+                        <td class="text-muted small">@enrolment.EnrolmentDate.ToLocalTime().ToString("dd MMM yyyy")</td>
+                        <td>
+                            <span class="badge @ViewHelpers.StatusBadge(enrolment.Status)">@enrolment.Status</span>
+                        </td>
+                        <td class="text-end">
+                            @if (enrolment.Status == "Cancelled")
+                            {
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Events"
+                                   asp-action="Details" asp-route-id="@enrolment.EventId">Enrol again</a>
+                            }
+                            else
+                            {
+                                <form method="post" asp-action="Cancel" class="d-inline"
+                                      onsubmit="return confirm('Cancel this enrolment?');">
+                                    <input type="hidden" name="id" value="@enrolment.EnrolmentId" />
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Cancel</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,74 @@
+@model List<ResultDto>
+@{
+    ViewData["Title"] = "My results";
+}
+
+<div class="mb-4">
+    <div class="rd-kicker">Your race history</div>
+    <h1 class="h2 rd-section-title mb-1">My results</h1>
+    <p class="text-muted mb-0">Finish times and positions captured by event organisers.</p>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="rd-empty-state">
+        <h3 class="h4">No results yet</h3>
+        <p class="text-muted mb-3">Results appear here after an organiser captures your finish time.</p>
+        <a class="btn btn-primary" asp-controller="Enrolments" asp-action="Index">View my enrolments</a>
+    </div>
+}
+else
+{
+    <div class="row g-4 mb-4">
+        <div class="col-md-6 col-xl-4">
+            <div class="rd-stat-card">
+                <div class="rd-stat-value">@Model.Count</div>
+                <div class="rd-stat-label">Completed races</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="rd-stat-card">
+                <div class="rd-stat-value">@ViewHelpers.Ordinal(Model.Min(r => r.Position))</div>
+                <div class="rd-stat-label">Best finishing position</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-4">
+            <div class="rd-stat-card">
+                <div class="rd-stat-value">@ViewHelpers.FinishTime(Model.Min(r => r.FinishTime))</div>
+                <div class="rd-stat-label">Personal best time</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rd-table">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Finish time</th>
+                    <th class="text-end">Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Model.OrderByDescending(r => r.EventDate))
+                {
+                    <tr>
+                        <td>
+                            <a class="fw-semibold" asp-controller="Events" asp-action="Details"
+                               asp-route-id="@result.EventId">@result.EventName</a>
+                        </td>
+                        <td>@result.EventDate.ToString("dd MMM yyyy")</td>
+                        <td>@result.CategoryName</td>
+                        <td class="fw-semibold">@ViewHelpers.FinishTime(result.FinishTime)</td>
+                        <td class="text-end">
+                            @ViewHelpers.Ordinal(result.Position)
+                            <span class="text-muted small">of @result.TotalFinishers finishers</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
