@@ -1,4 +1,4 @@
-name: Part 2 - Build and Test API
+name: RaceDay - Build, Test and Publish
 
 # Runs on every push (any branch) and on pull requests
 on:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  # Must match <TargetFramework> in your .csproj files (net10.0 -> 10.0.x)
+  # Must match <TargetFramework> in the .csproj files (net10.0 -> 10.0.x)
   DOTNET_VERSION: '10.0.x'
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -14,12 +14,6 @@ env:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        # The folder that contains your .sln file, relative to the repo root.
-        # Use '.' if the .sln is in the repo root, or e.g. 'Part2' if it is in a Part2 folder.
-        working-directory: .
 
     steps:
       - name: Check out repository
@@ -30,17 +24,24 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore dependencies
-        run: dotnet restore
+      - name: Restore API, MVC and tests
+        run: dotnet restore RaceDay.Api.slnx
 
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
+      - name: Build solution
+        run: dotnet build RaceDay.Api.slnx --no-restore --configuration Release
 
       - name: Run unit tests
         run: >
-          dotnet test --no-build --configuration Release
+          dotnet test RaceDay.Api.test/RaceDay.Api.test.csproj
+          --no-build --configuration Release
           --logger "trx;LogFileName=test-results.trx"
           --results-directory ./TestResults
+
+      - name: Publish MVC application
+        run: >
+          dotnet publish RaceDay.Mvc/RaceDay.Mvc.csproj
+          --no-build --configuration Release
+          --output ./artifacts/mvc
 
       - name: Upload test results
         if: always()
@@ -48,3 +49,9 @@ jobs:
         with:
           name: test-results
           path: '**/TestResults/*.trx'
+
+      - name: Upload MVC publish output
+        uses: actions/upload-artifact@v4
+        with:
+          name: raceday-mvc
+          path: ./artifacts/mvc
