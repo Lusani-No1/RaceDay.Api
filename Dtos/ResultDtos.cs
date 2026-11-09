@@ -32,7 +32,9 @@ public record ResultResponse(
     string ParticipantName,
     int EventId,
     string EventName,
+    DateOnly EventDate,
     int CategoryId,
     string CategoryName,
     TimeSpan FinishTime,
-    int Position);
+    int Position,
+    int TotalFinishers);

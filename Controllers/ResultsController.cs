@@ -72,7 +72,9 @@ public class ResultsController : ControllerBase
         }
 
         var created = await WithDetails().FirstAsync(r => r.ResultId == result.ResultId);
-        return Created($"/api/results/{created.ResultId}", ToResponse(created));
+        var createdTotal = await _db.Results.CountAsync(
+            r => r.Enrolment.Category.EventId == created.Enrolment.Category.EventId);
+        return Created($"/api/results/{created.ResultId}", ToResponse(created, createdTotal));
     }
 
     /// <summary>Corrects a previously captured result on an event the Organiser owns.</summary>
@@ -104,7 +106,9 @@ public class ResultsController : ControllerBase
         await _db.SaveChangesAsync();
 
         var updated = await WithDetails().FirstAsync(r => r.ResultId == id);
-        return Ok(ToResponse(updated));
+        var updatedTotal = await _db.Results.CountAsync(
+            r => r.Enrolment.Category.EventId == updated.Enrolment.Category.EventId);
+        return Ok(ToResponse(updated, updatedTotal));
     }
 
     /// <summary>Lists the logged-in Participant's own results across all events.</summary>
@@ -124,7 +128,15 @@ public class ResultsController : ControllerBase
             .OrderByDescending(r => r.Enrolment.Category.Event.EventDate)
             .ToListAsync();
 
-        return Ok(results.Select(ToResponse));
+        var eventIds = results.Select(r => r.Enrolment.Category.EventId).Distinct().ToList();
+        var totals = await _db.Results
+            .Where(r => eventIds.Contains(r.Enrolment.Category.EventId))
+            .GroupBy(r => r.Enrolment.Category.EventId)
+            .Select(g => new { EventId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.EventId, x => x.Count);
+
+        return Ok(results.Select(r =>
+            ToResponse(r, totals.GetValueOrDefault(r.Enrolment.Category.EventId))));
     }
 
     /// <summary>Lists all captured results for an event the Organiser owns.</summary>
@@ -151,17 +163,18 @@ public class ResultsController : ControllerBase
             .OrderBy(r => r.Enrolment.CategoryId).ThenBy(r => r.Position)
             .ToListAsync();
 
-        return Ok(results.Select(ToResponse));
+        return Ok(results.Select(r => ToResponse(r, results.Count)));
     }
 
     private IQueryable<Result> WithDetails() => _db.Results.AsNoTracking()
         .Include(r => r.Enrolment).ThenInclude(e => e.Participant)
         .Include(r => r.Enrolment).ThenInclude(e => e.Category).ThenInclude(c => c.Event);
 
-    private static ResultResponse ToResponse(Result r) => new(
+    private static ResultResponse ToResponse(Result r, int totalFinishers) => new(
         r.ResultId, r.EnrolmentId,
         r.Enrolment.ParticipantId, r.Enrolment.Participant.FullName,
         r.Enrolment.Category.EventId, r.Enrolment.Category.Event.Name,
+        r.Enrolment.Category.Event.EventDate,
         r.Enrolment.CategoryId, r.Enrolment.Category.Name,
-        r.FinishTime, r.Position);
+        r.FinishTime, r.Position, totalFinishers);
 }
