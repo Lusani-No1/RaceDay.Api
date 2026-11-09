@@ -271,6 +271,24 @@ Prerequisites: .NET 10 SDK and SQL Server (Express is fine).
 
 4. Open http://localhost:5080 and register. To create an Organiser, enter the organiser access code configured in `Auth:OrganiserAccessCode` (development value: `RACEDAY-ORG-2026`).
 
+Demo data
+
+`docs/Demo_Seed.sql` replaces the automated test records with a realistic demo data set: five events, categories, enrolments with every status, and a completed marathon with 312 finishers. The script keeps the existing real account and the "Running" event.
+
+The script deletes all other users and events, so run it only against a development database.
+
+```bash
+sqlcmd -S "YOUR_SERVER\SQLEXPRESS" -E -d RaceDayApiDb -i docs/Demo_Seed.sql
+```
+
+Demo sign-ins (password `Password123!`):
+
+| Role | Email |
+|---|---|
+| Organiser | `demo.organiser@raceday.test` |
+| Participant | `demo.runner@raceday.test` (47th out of 312 finishers) |
+| Participant | `demo.walker@raceday.test` |
+
 MVC configuration
 
 `RaceDay.Mvc/appsettings.json`:
@@ -380,6 +398,10 @@ Screenshots
 **Event details and enrolment**
 
 ![Event details with categories and banner](docs/screenshots/event-details.jpg)
+
+**My enrolments**
+
+![My enrolments with colour-coded statuses](docs/screenshots/enrolments.jpg)
 
 **My results**
 
