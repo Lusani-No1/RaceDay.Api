@@ -1,0 +1,86 @@
+@{
+    var role = User.GetRole();
+    var fullName = User.GetFullName();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · RaceDay</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark rd-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand rd-brand" asp-controller="Home" asp-action="Index">
+                Race<span>Day</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        @if (role == "Participant")
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Events" asp-action="Index">Events</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Enrolments" asp-action="Index">My enrolments</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Results" asp-action="Mine">My results</a></li>
+                        }
+                        else if (role == "Organiser")
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Organiser" asp-action="Index">Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="OrganiserEvents" asp-action="Index">My events</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Events" asp-action="Index">Browse events</a></li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                        <li class="nav-item">
+                            <a class="nav-link rd-user" asp-controller="Profile" asp-action="Index">
+                                <span class="rd-role-dot"></span>
+                                <span class="d-none d-lg-inline">@fullName</span>
+                                <span class="badge rd-role-badge">@role</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
+                                <button type="submit" class="btn btn-outline-light btn-sm">Sign out</button>
+                            </form>
+                        </li>
+                    </ul>
+                }
+                else
+                {
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Sign in</a></li>
+                        <li class="nav-item"><a class="btn btn-light btn-sm ms-lg-2" asp-controller="Account" asp-action="Register">Create account</a></li>
+                    </ul>
+                }
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4 py-lg-5">
+        <partial name="_Alerts" />
+        @RenderBody()
+    </main>
+
+    <footer class="rd-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+            <span>© @DateTime.Today.Year RaceDay · Run. Walk. Cycle.</span>
+            <span>Powered by the RaceDay REST API</span>
+        </div>
+    </footer>
+
+    <script src="~/lib/bootstrap/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
