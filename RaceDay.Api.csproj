@@ -5,9 +5,14 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Models and DTOs don't need /// comments on every member; silence CS1591. -->
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <!-- The test project lives under this folder; keep its .cs files out of the API project. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);RaceDay.Api.test\**;RaceDay.Mvc\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.30.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.13">
