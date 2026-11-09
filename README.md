@@ -387,13 +387,13 @@ Compose starts SQL Server, waits for it via the API's migrate-on-startup retry l
 The database starts empty (schema only). To load the same demo data used in the screenshots, run the seed script against the SQL container:
 
 ```bash
-docker exec -i racedayapi-sql-1 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "RaceDay#2026!Pass" -C < docs/Demo_Seed.sql
+docker compose exec -T sql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "RaceDay#2026!Pass" -C < docs/Demo_Seed.sql
 ```
 
 PowerShell does not support the `<` redirection, so use:
 
 ```powershell
-Get-Content docs/Demo_Seed.sql -Raw | docker exec -i racedayapi-sql-1 /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "RaceDay#2026!Pass" -C
+Get-Content docs/Demo_Seed.sql -Raw | docker compose exec -T sql /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "RaceDay#2026!Pass" -C
 ```
 
 Replace the password if you overrode `SA_PASSWORD`. The script is destructive and is intended only for this local demo database. Sign in with the demo accounts listed under **Demo data**.
