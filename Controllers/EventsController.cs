@@ -5,6 +5,7 @@ using RaceDay.Api.Data;
 using RaceDay.Api.Dtos;
 using RaceDay.Api.Extensions;
 using RaceDay.Api.Models;
+using RaceDay.Api.Services;
 
 namespace RaceDay.Api.Controllers;
 
@@ -14,8 +15,13 @@ namespace RaceDay.Api.Controllers;
 public class EventsController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly IFileStorage _storage;
 
-    public EventsController(AppDbContext db) => _db = db;
+    public EventsController(AppDbContext db, IFileStorage storage)
+    {
+        _db = db;
+        _storage = storage;
+    }
 
     /// <summary>Lists all events, soonest first.</summary>
     /// <response code="200">Success.</response>
@@ -52,7 +58,7 @@ public class EventsController : ControllerBase
 
         return Ok(new EventDetailResponse(
             ev.EventId, ev.OrganiserId, ev.Organiser.FullName, ev.Name, ev.Description,
-            ev.EventDate, ev.Location, ev.DistanceKm, ev.EventType,
+            ev.EventDate, ev.Location, ev.DistanceKm, ev.EventType, ev.BannerUrl,
             ev.Categories.OrderBy(c => c.CategoryId).Select(CategoriesController.ToResponse).ToList()));
     }
 
@@ -150,7 +156,45 @@ public class EventsController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>Uploads or replaces the banner image for an event the Organiser owns.</summary>
+    /// <response code="200">Success. The updated event is returned.</response>
+    /// <response code="400">The image is missing, too large, or not a supported type.</response>
+    /// <response code="401">Not logged in.</response>
+    /// <response code="403">Only the Organiser who owns the event can upload its banner.</response>
+    /// <response code="404">Event not found.</response>
+    [HttpPost("{id:int}/banner")]
+    [Authorize(Roles = "Organiser")]
+    [RequestSizeLimit(6_000_000)]
+    [ProducesResponseType(typeof(EventResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UploadBanner(int id, IFormFile file, CancellationToken ct)
+    {
+        var validationError = ImageUpload.Validate(file);
+        if (validationError is not null)
+            return Problem(title: validationError, statusCode: StatusCodes.Status400BadRequest);
+
+        var ev = await _db.Events.FirstOrDefaultAsync(e => e.EventId == id);
+        if (ev is null) return NotFound();
+        if (ev.OrganiserId != User.GetUserId())
+            return Problem(title: "You can only change your own events.", statusCode: StatusCodes.Status403Forbidden);
+
+        await using var stream = file.OpenReadStream();
+        var url = await _storage.SaveAsync(stream, file.FileName, file.ContentType!, "event-banners", ct);
+
+        if (!string.IsNullOrWhiteSpace(ev.BannerUrl))
+            await _storage.DeleteAsync(ev.BannerUrl, ct);
+
+        ev.BannerUrl = url;
+        await _db.SaveChangesAsync();
+        await _db.Entry(ev).Reference(e => e.Organiser).LoadAsync();
+
+        return Ok(ToResponse(ev));
+    }
+
     private static EventResponse ToResponse(Event e) => new(
         e.EventId, e.OrganiserId, e.Organiser.FullName, e.Name, e.Description,
-        e.EventDate, e.Location, e.DistanceKm, e.EventType);
+        e.EventDate, e.Location, e.DistanceKm, e.EventType, e.BannerUrl);
 }
