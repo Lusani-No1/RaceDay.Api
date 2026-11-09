@@ -1,0 +1,59 @@
+# RaceDay - API, MVC front end and SQL Server.
+#
+#   docker compose up --build
+#
+# Then open http://localhost:8081 (MVC) and http://localhost:8080/swagger (API).
+
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD:-RaceDay#2026!Pass}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - raceday-sql:/var/opt/mssql
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # Development keeps Swagger available at http://localhost:8080/swagger.
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Server=sql,1433;Database=RaceDayApiDb;User Id=sa;Password=${SA_PASSWORD:-RaceDay#2026!Pass};TrustServerCertificate=True;"
+      Database__MigrateOnStartup: "true"
+      Auth__OrganiserAccessCode: "${ORGANISER_ACCESS_CODE:-RACEDAY-ORG-2026}"
+      Storage__Provider: "${STORAGE_PROVIDER:-Local}"
+      Storage__Azure__ConnectionString: "${AZURE_STORAGE_CONNECTION_STRING:-}"
+      Storage__Azure__ContainerName: "${AZURE_STORAGE_CONTAINER:-raceday}"
+      Storage__Azure__PublicBaseUrl: "${AZURE_STORAGE_PUBLIC_BASE_URL:-}"
+    ports:
+      - "8080:8080"
+    volumes:
+      # Keeps locally stored banners and profile pictures between container restarts.
+      - raceday-uploads:/app/wwwroot/uploads
+    depends_on:
+      - sql
+
+  mvc:
+    build:
+      context: .
+      dockerfile: RaceDay.Mvc/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      # Server-to-server API address inside the compose network.
+      Api__BaseUrl: http://api:8080
+      # Address the browser uses to load uploaded images.
+      Api__PublicBaseUrl: "http://localhost:8080"
+    ports:
+      - "8081:8080"
+    depends_on:
+      - api
+
+volumes:
+  raceday-sql:
+  raceday-uploads:
