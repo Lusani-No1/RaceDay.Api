@@ -180,7 +180,7 @@ A GitHub Actions workflow (.github/workflows/dotnet-ci.yml) restores, builds and
 
 **Green build screenshot:**
 
-_[Insert a screenshot of the successful GitHub Actions run here]_
+![GitHub Actions green build](docs/screenshots/github-actions-green.jpg)
 
 Part 2 video
 
@@ -373,27 +373,35 @@ Screenshots
 
 **Participant home page**
 
-_[Insert screenshot]_
+![Participant home page with event banners](docs/screenshots/participant-home.jpg)
+
+![Event list with search and filters](docs/screenshots/events.jpg)
 
 **Event details and enrolment**
 
-_[Insert screenshot]_
+![Event details with categories and banner](docs/screenshots/event-details.jpg)
 
 **My results**
 
-_[Insert screenshot]_
+![My results with position and total finishers](docs/screenshots/my-results.jpg)
 
 **Organiser dashboard**
 
-_[Insert screenshot]_
+![Organiser dashboard](docs/screenshots/organiser-dashboard.jpg)
+
+![Organiser events](docs/screenshots/organiser-events.jpg)
+
+![Organiser enrolments](docs/screenshots/organiser-enrolments.jpg)
 
 **Category and result management**
 
-_[Insert screenshot]_
+![Organiser category management](docs/screenshots/organiser-categories.jpg)
+
+![Organiser result capture](docs/screenshots/organiser-results.jpg)
 
 **Profile with picture upload**
 
-_[Insert screenshot]_
+![Profile with picture upload](docs/screenshots/profile.jpg)
 
 **Docker Compose running**
 
