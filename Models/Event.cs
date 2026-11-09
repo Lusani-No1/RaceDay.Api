@@ -10,6 +10,7 @@ public class Event
     public string Location { get; set; } = string.Empty;
     public decimal DistanceKm { get; set; }
     public EventType EventType { get; set; }
+    public string? BannerUrl { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public User Organiser { get; set; } = null!;

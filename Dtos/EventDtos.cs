@@ -45,7 +45,8 @@ public record EventResponse(
     DateOnly EventDate,
     string Location,
     decimal DistanceKm,
-    EventType EventType);
+    EventType EventType,
+    string? BannerUrl);
 
 public record EventDetailResponse(
     int EventId,
@@ -57,4 +58,5 @@ public record EventDetailResponse(
     string Location,
     decimal DistanceKm,
     EventType EventType,
+    string? BannerUrl,
     IReadOnlyList<CategoryResponse> Categories);

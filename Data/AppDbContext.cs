@@ -51,6 +51,7 @@ public class AppDbContext : DbContext
             e.Property(x => x.Location).HasMaxLength(150).IsRequired();
             e.Property(x => x.DistanceKm).HasPrecision(6, 2);
             e.Property(x => x.EventType).HasConversion<string>().HasMaxLength(10);
+            e.Property(x => x.BannerUrl).HasMaxLength(500);
             e.Property(x => x.CreatedAt).HasDefaultValueSql("SYSDATETIME()");
             e.HasOne(x => x.Organiser).WithMany(u => u.OrganisedEvents)
                 .HasForeignKey(x => x.OrganiserId)
