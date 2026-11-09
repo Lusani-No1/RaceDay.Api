@@ -1,0 +1,70 @@
+@model ProfileViewModel
+@{
+    ViewData["Title"] = "My profile";
+    var profile = Model.Profile;
+    var picture = string.IsNullOrWhiteSpace(profile.ProfileImageUrl)
+        ? Url.Content("~/img/avatar.svg")
+        : ApiUrl.Resolve(profile.ProfileImageUrl);
+}
+
+<div class="rd-profile-header rd-fade-in mb-4">
+    <div class="d-flex flex-column flex-md-row align-items-md-center gap-4">
+        <img class="rd-avatar" src="@picture" alt="@profile.FullName profile picture" />
+        <div class="flex-grow-1">
+            <div class="rd-kicker mb-1">@profile.Role</div>
+            <h1 class="h2 mb-1">@profile.FullName</h1>
+            <p class="mb-1 text-white-50">@profile.Email</p>
+            <p class="mb-0 text-white-50 small">Member since @profile.CreatedAt.ToLocalTime().ToString("MMMM yyyy")</p>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <a class="btn btn-light" asp-action="Edit">Edit profile</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5 rd-section-title mb-3">Personal information</h2>
+                <div class="rd-info-grid">
+                    <div class="rd-info-tile">
+                        <span class="label">Full name</span>
+                        <span class="value">@profile.FullName</span>
+                    </div>
+                    <div class="rd-info-tile">
+                        <span class="label">Email</span>
+                        <span class="value">@profile.Email</span>
+                    </div>
+                    <div class="rd-info-tile">
+                        <span class="label">Phone</span>
+                        <span class="value">@(string.IsNullOrWhiteSpace(profile.PhoneNumber) ? "Not set" : profile.PhoneNumber)</span>
+                    </div>
+                    <div class="rd-info-tile">
+                        <span class="label">Date of birth</span>
+                        <span class="value">@(profile.DateOfBirth?.ToString("dd MMM yyyy") ?? "Not set")</span>
+                    </div>
+                    <div class="rd-info-tile">
+                        <span class="label">Emergency contact</span>
+                        <span class="value">@(string.IsNullOrWhiteSpace(profile.EmergencyContact) ? "Not set" : profile.EmergencyContact)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5 rd-section-title mb-3">Profile picture</h2>
+                <p class="text-muted small">JPEG, PNG or WebP · up to 5 MB. File handling goes through the RaceDay API.</p>
+                <form method="post" asp-action="Picture" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input class="form-control" type="file" name="picture" accept="image/jpeg,image/png,image/webp" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload picture</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
