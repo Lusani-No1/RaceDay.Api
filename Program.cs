@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RaceDay.Api.Data;
 using RaceDay.Api.Models;
+using RaceDay.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Password hashing (salted, one-way) - passwords are never stored in plain text
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+
+// Uploaded images: Azure Blob Storage when configured, otherwise local wwwroot/uploads.
+builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
+var storageProvider = builder.Configuration["Storage:Provider"] ?? "Local";
+if (storageProvider.Equals("Azure", StringComparison.OrdinalIgnoreCase))
+    builder.Services.AddSingleton<IFileStorage, AzureBlobFileStorage>();
+else
+    builder.Services.AddSingleton<IFileStorage, LocalFileStorage>();
 
 // Session management: login issues an encrypted cookie holding the user's id and role
 builder.Services
@@ -57,6 +66,27 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+// Docker/compose can wait for SQL Server this way instead of needing a manual Update-Database.
+if (app.Configuration.GetValue("Database:MigrateOnStartup", false))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    for (var attempt = 1; ; attempt++)
+    {
+        try
+        {
+            await db.Database.MigrateAsync();
+            break;
+        }
+        catch (Exception ex) when (attempt < 30)
+        {
+            app.Logger.LogWarning(ex, "Database is not ready (attempt {Attempt}/30); retrying in 3 seconds.", attempt);
+            await Task.Delay(TimeSpan.FromSeconds(3));
+        }
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -64,6 +94,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();      // serves locally stored uploads
 app.UseAuthentication();   // must come before UseAuthorization
 app.UseAuthorization();
 app.MapControllers();
