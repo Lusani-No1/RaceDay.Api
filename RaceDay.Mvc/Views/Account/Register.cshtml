@@ -1,0 +1,75 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Create account";
+}
+
+<div class="rd-auth-card rd-fade-in">
+    <div class="text-center mb-4">
+        <div class="rd-brand fs-2">Race<span>Day</span></div>
+        <p class="text-muted mb-0">Join as a Participant or an Organiser.</p>
+    </div>
+
+    <form method="post" asp-action="Register" id="registerForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label"></label>
+            <input asp-for="FullName" class="form-control" autocomplete="name" />
+            <span asp-validation-for="FullName" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" autocomplete="email" />
+            <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <label asp-for="Role" class="form-label"></label>
+            <select asp-for="Role" class="form-select" id="roleSelect">
+                <option value="Participant">Participant — enter events and track results</option>
+                <option value="Organiser">Organiser — create and manage events</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger small"></span>
+        </div>
+
+        <div class="mt-3" id="organiserCodeGroup">
+            <label asp-for="OrganiserAccessCode" class="form-label"></label>
+            <input asp-for="OrganiserAccessCode" class="form-control" />
+            <div class="form-text">Ask the RaceDay administrator for the Organiser access code.</div>
+            <span asp-validation-for="OrganiserAccessCode" class="text-danger small"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 mt-4">Create account</button>
+    </form>
+
+    <p class="text-center text-muted small mt-4 mb-0">
+        Already registered?
+        <a asp-action="Login" class="fw-semibold">Sign in</a>
+    </p>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const role = document.getElementById('roleSelect');
+            const group = document.getElementById('organiserCodeGroup');
+            function toggle() { group.style.display = role.value === 'Organiser' ? '' : 'none'; }
+            role.addEventListener('change', toggle);
+            toggle();
+        })();
+    </script>
+}
