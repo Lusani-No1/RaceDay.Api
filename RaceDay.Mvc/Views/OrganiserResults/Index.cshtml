@@ -1,0 +1,102 @@
+@model EventResultsViewModel
+@{
+    ViewData["Title"] = "Results";
+}
+
+<a class="d-inline-block mb-3 small fw-semibold" asp-controller="OrganiserEvents" asp-action="Index">
+    ← Back to my events
+</a>
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <div class="rd-kicker">Race results</div>
+        <h1 class="h2 rd-section-title mb-1">@Model.Event.Name</h1>
+        <p class="text-muted mb-0">
+            @Model.Event.EventDate.ToString("dd MMM yyyy") · @Model.Event.Location
+        </p>
+    </div>
+    <a class="btn btn-outline-primary" asp-controller="OrganiserEnrolments" asp-action="Index"
+       asp-route-eventId="@Model.Event.EventId">View enrolments</a>
+</div>
+
+<div class="d-flex justify-content-between align-items-end mb-3">
+    <h2 class="h4 rd-section-title mb-0">Captured results</h2>
+    <span class="rd-chip">@Model.Results.Count captured</span>
+</div>
+
+@if (Model.Results.Count == 0)
+{
+    <div class="rd-empty-state mb-4">
+        <h3 class="h4">No results captured yet</h3>
+        <p class="text-muted mb-0">Capture finish times from the list below once the race is done.</p>
+    </div>
+}
+else
+{
+    <div class="rd-table mb-4">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Participant</th>
+                    <th>Category</th>
+                    <th>Finish time</th>
+                    <th>Position</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Model.Results)
+                {
+                    <tr>
+                        <td class="fw-semibold">@result.ParticipantName</td>
+                        <td>@result.CategoryName</td>
+                        <td class="fw-semibold">@ViewHelpers.FinishTime(result.FinishTime)</td>
+                        <td>@ViewHelpers.Ordinal(result.Position) of @result.TotalFinishers</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit"
+                               asp-route-eventId="@Model.Event.EventId"
+                               asp-route-resultId="@result.ResultId">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<h2 class="h4 rd-section-title mb-3">Awaiting results</h2>
+
+@if (Model.AwaitingResults.Count == 0)
+{
+    <div class="rd-empty-state">
+        <p class="text-muted mb-0">Every confirmed enrolment has a captured result.</p>
+    </div>
+}
+else
+{
+    <div class="rd-table">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Participant</th>
+                    <th>Category</th>
+                    <th class="text-end">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrolment in Model.AwaitingResults.OrderBy(e => e.CategoryName).ThenBy(e => e.ParticipantName))
+                {
+                    <tr>
+                        <td class="fw-semibold">@enrolment.ParticipantName</td>
+                        <td>@enrolment.CategoryName</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-primary" asp-action="Capture"
+                               asp-route-eventId="@Model.Event.EventId"
+                               asp-route-enrolmentId="@enrolment.EnrolmentId">Capture result</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

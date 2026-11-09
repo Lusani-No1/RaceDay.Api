@@ -1,0 +1,35 @@
+@model ResultFormViewModel
+@{
+    ViewData["Title"] = "Capture result";
+}
+
+<a class="d-inline-block mb-3 small fw-semibold" asp-action="Index" asp-route-eventId="@Model.EventId">
+    ← Back to results
+</a>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <h1 class="h3 rd-section-title mb-1">Capture result</h1>
+        <p class="text-muted mb-4">
+            @Model.EventName · <span class="fw-semibold text-body">@Model.ParticipantName</span>
+            @if (!string.IsNullOrWhiteSpace(Model.CategoryName))
+            {
+                <span> · @Model.CategoryName</span>
+            }
+        </p>
+
+        <form method="post" asp-action="Capture" asp-route-eventId="@Model.EventId"
+              asp-route-enrolmentId="@Model.EnrolmentId">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+            <input type="hidden" asp-for="EventId" />
+            <input type="hidden" asp-for="EnrolmentId" />
+            <input type="hidden" asp-for="ParticipantName" />
+            <input type="hidden" asp-for="CategoryName" />
+            <partial name="_Form" model="Model" />
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save result</button>
+                <a class="btn btn-outline-secondary" asp-action="Index" asp-route-eventId="@Model.EventId">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
