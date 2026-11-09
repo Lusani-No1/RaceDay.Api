@@ -11,7 +11,7 @@ This repository holds a three-part Portfolio of Evidence:
 | Part 2 | RESTful API (ASP.NET Core, EF Core, cookie sessions, Swagger, unit tests, CI/CD) | Complete |
 | Part 3 | MVC web application, Azure Blob Storage, Docker | Complete |
 
-Roles
+## Roles
 
 The system has two roles, enforced at the API level in Part 2 and reflected in the MVC app in Part 3.
 
@@ -20,7 +20,7 @@ The system has two roles, enforced at the API level in Part 2 and reflected in t
 
 Both roles can view and update their own profile.
 
-Repository structure
+## Repository structure
 
 /docs                        Part 1 planning documents
   RaceDay_ERD.png            Entity Relationship Diagram
@@ -46,7 +46,7 @@ Repository structure
 .github/workflows/           GitHub Actions workflows
 README.md
 
-Part 1 - System Planning and Database
+## Part 1 - System Planning and Database
 
 Everything for Part 1 is in /docs:
 
@@ -56,9 +56,9 @@ Everything for Part 1 is in /docs:
 
 Part 1 video: https://youtu.be/tNPN8o0Gkxo
 
-Part 2 - RESTful API
+## Part 2 - RESTful API
 
-Technology
+### Technology
 
 - .NET 10, ASP.NET Core Web API (controllers)
 - Entity Framework Core 10, code-first, SQL Server
@@ -67,12 +67,12 @@ Technology
 - Swagger (Swashbuckle) for live endpoint documentation and testing
 - GitHub Actions for build and test on every push
 
-Prerequisites
+### Prerequisites
 
 - Visual Studio 2026 with the ASP.NET and web development workload, or the .NET 10 SDK
 - SQL Server (Express is fine) and SQL Server Management Studio
 
-Setup and run
+### Setup and run
 
 1. Clone the repository:
 
@@ -108,7 +108,7 @@ Setup and run
 
 6. Open Swagger. Browse to `https://localhost:7089/swagger`. Every endpoint can be tried from this page.
 
-Trying the API in Swagger
+### Trying the API in Swagger
 
 1. `POST /api/auth/register` - create a Participant (`"role": "Participant"`) or an Organiser (`"role": "Organiser"` plus the `organiserAccessCode`).
 2. `POST /api/auth/login` - log in. The browser stores the session cookie, so later requests from the Swagger page are authenticated automatically.
@@ -117,7 +117,7 @@ Trying the API in Swagger
 
 Use one address (`https://localhost:7089` or `http://localhost:5062`) for a whole session, because each address has its own cookie.
 
-Endpoints
+### Endpoints
 
 | Method | Route | Access |
 |---|---|---|
@@ -148,7 +148,7 @@ Endpoints
 
 "Owner" means the Organiser who created the event, or the Participant who made the enrolment. The full specification, with request bodies and response codes, is in docs/RaceDay_Endpoint_Plan.md.
 
-Design decisions
+### Design decisions
 
 - Sessions. Logging in issues an encrypted, HTTP-only cookie holding the user's id and role. The API answers 401 for no session and 403 for the wrong role, rather than redirecting to a login page.
 - Passwords are salted and hashed with ASP.NET Core's PasswordHasher; the plain password is never stored. Login failures use one message for both "unknown email" and "wrong password".
@@ -158,7 +158,7 @@ Design decisions
 - Protected deletes. An event or category that already has enrolments cannot be deleted (409), because enrolments are not cascade-deleted in the schema.
 - Categories can be distance-based (10km), age-based (Under 20, Senior), or both.
 
-Database: differences from the Part 1 script
+### Database: differences from the Part 1 script
 
 The EF Core migrations create the same six tables, columns, keys and constraints as docs/RaceDay_Schema.sql. The deliberate differences are:
 
@@ -166,7 +166,7 @@ The EF Core migrations create the same six tables, columns, keys and constraints
 - Unique constraints are created by EF as unique indexes with EF's default names (IX_...) instead of the UQ_... names in the script.
 - Enrolments.Status has no database-level default; the API sets it to Confirmed in code.
 
-Unit tests
+### Unit tests
 
 The tests are in RaceDay.Api.test and use xUnit. Each test starts the real API in memory and sends real HTTP requests (including the login cookie), with an in-memory database in place of SQL Server. They therefore need no database and run the same locally and on GitHub Actions.
 
@@ -186,7 +186,7 @@ The tests cover success and failure cases for:
 
 The in-memory database does not enforce unique indexes or check constraints, so these tests check the API's own validation. The database-level constraints are shown by the SQL script in Part 1.
 
-CI/CD
+### CI/CD
 
 A GitHub Actions workflow (.github/workflows/dotnet-ci.yml) restores, builds and runs all unit tests on every push.
 
@@ -194,16 +194,16 @@ A GitHub Actions workflow (.github/workflows/dotnet-ci.yml) restores, builds and
 
 ![GitHub Actions green build](docs/screenshots/github-actions-green.jpg)
 
-Part 2 video
+### Part 2 video
 
 https://youtu.be/tNPN8o0Gkxo
 
 
-Part 3 - MVC Web Application
+## Part 3 - MVC Web Application
 
 The Part 3 front end is an ASP.NET Core MVC application that consumes the Part 2 API for every data operation. It has no direct database access and no duplicated business rules: authentication, ownership checks, enrolment rules and result rules all stay in the API.
 
-Technology
+### Technology
 
 - .NET 10, ASP.NET Core MVC with Razor views
 - Cookie authentication for the MVC sign-in, plus server-side session storage for the API session cookie
@@ -213,7 +213,7 @@ Technology
 - Docker and Docker Compose for the API, MVC app and SQL Server
 - GitHub Actions building both projects, running the API tests and publishing the MVC output
 
-Architecture
+### Architecture
 
 ```text
 Browser
@@ -231,9 +231,9 @@ RaceDay.Mvc  ──HTTP──▶  RaceDay.Api  ──EF Core──▶  SQL Serve
 - Organiser ownership is checked again by the API on every write. MVC also filters "my events" using the organiser id so users only see their own management pages.
 - Uploaded images are sent to dedicated API endpoints (`POST /api/events/{id}/banner` and `POST /api/users/me/profile-picture`). The API validates type and size and returns a URL stored on the event or profile record.
 
-Features
+### Features
 
-Participant
+#### Participant
 
 - Home page with upcoming events and search/type filters
 - Full event list with search, event type and from-date filters
@@ -243,7 +243,7 @@ Participant
 - My Results with finish time, ordinal position and total finishers, e.g. "47th out of 312 finishers"
 - Profile view and edit, including profile picture upload
 
-Organiser
+#### Organiser
 
 - Dashboard with event, upcoming event and enrolment totals
 - Create, edit and delete own events, including banner upload
@@ -252,13 +252,13 @@ Organiser
 - Capture and correct results (finish time and position)
 - Organiser-only navigation and pages; Participants cannot open organiser routes
 
-Shared
+#### Shared
 
 - Registration and login with validation and graceful API error messages
 - All pages require authentication except login, register and access denied
 - Consistent RaceDay theme, responsive layout, empty states and confirmation prompts for destructive actions
 
-Running Part 3 locally
+### Running Part 3 locally
 
 Prerequisites: .NET 10 SDK and SQL Server (Express is fine).
 
@@ -283,7 +283,7 @@ Prerequisites: .NET 10 SDK and SQL Server (Express is fine).
 
 4. Open http://localhost:5080 and register. To create an Organiser, enter the organiser access code configured in `Auth:OrganiserAccessCode` (development value: `RACEDAY-ORG-2026`).
 
-Demo data
+### Demo data
 
 `docs/Demo_Seed.sql` replaces the automated test records with a realistic demo data set: five events, categories, enrolments with every status, and a completed marathon with 312 finishers. The script keeps the existing real account and the "Running" event.
 
@@ -301,7 +301,7 @@ Demo sign-ins (password `Password123!`):
 | Participant | `demo.runner@raceday.test` (47th out of 312 finishers) |
 | Participant | `demo.walker@raceday.test` |
 
-MVC configuration
+### MVC configuration
 
 `RaceDay.Mvc/appsettings.json`:
 
@@ -317,7 +317,7 @@ MVC configuration
 - `Api:BaseUrl` is the address MVC uses for server-to-server API calls.
 - `Api:PublicBaseUrl` is optional. It is the address the browser uses for uploaded images. When empty it falls back to `Api:BaseUrl`. This matters in Docker, where MVC calls `http://api:8080` but the browser must load images from `http://localhost:8080`.
 
-Azure Blob Storage
+### Azure Blob Storage
 
 Azure Blob Storage is integrated in the API only. Local development uses the local provider by default, so no Azure account is required to run the project.
 
@@ -354,7 +354,7 @@ Image rules: JPEG, PNG or WebP, maximum 5 MB. The API validates the content type
 
 Events without an uploaded banner fall back to one of the bundled RaceDay banner images in `wwwroot/images/event-banners`, served by the API.
 
-Verification with the Azurite storage emulator
+#### Verification with the Azurite storage emulator
 
 The Azure provider was run end-to-end against [Azurite](https://learn.microsoft.com/azure/storage/common/storage-use-azurite), the official Azure Storage emulator:
 
@@ -370,7 +370,7 @@ GET <bannerUrl>
 
 ![Azure Blob Storage serving an uploaded event banner](docs/screenshots/azure-blob-storage.jpg)
 
-Docker
+### Docker
 
 Build and run the whole stack with one command from the repository root:
 
@@ -409,7 +409,7 @@ AZURE_STORAGE_CONTAINER
 AZURE_STORAGE_PUBLIC_BASE_URL
 ```
 
-Single container
+### Single container
 
 The MVC Dockerfile can be built and run on its own against an API already running on the host:
 
@@ -423,7 +423,7 @@ docker run --rm -p 8081:8080 -e Api__BaseUrl=http://host.docker.internal:5062 -e
 
 On Linux, add `--add-host=host.docker.internal:host-gateway` to the `docker run` command so the container can reach the host API.
 
-CI/CD
+### CI/CD
 
 `.github/workflows/dotnet-ci.yml` now:
 
@@ -431,7 +431,7 @@ CI/CD
 2. runs the API's xUnit integration tests;
 3. publishes the MVC application and uploads it as a build artifact.
 
-Screenshots
+### Screenshots
 
 **Participant home page**
 
@@ -473,13 +473,13 @@ Screenshots
 
 ![Docker Compose stack with the containers running and the MVC app loaded](docs/screenshots/docker-compose.jpg)
 
-Part 3 video
+### Part 3 video
 
 _[Insert link]_
 
 The recording checklist is in `docs/Video_Walkthrough.md`.
 
 
- AI use disclosure
+## AI use disclosure
 
 I used Claude (an AI assistant) while working on this project. It helped me draft the endpoint plan and API code errors. I reviewed, ran and tested what it produced, and I explained how each part works.
