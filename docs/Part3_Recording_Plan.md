@@ -73,10 +73,11 @@ docker compose ps
 - [ ] Signed out of the app, so every clip starts from a known state.
 - [ ] If this session shows counts, reseed first (see section 4).
 
-Create the upload image once:
+Create the upload image once. It goes in the ingest folder so it is easy to
+find in the file picker:
 
 ```powershell
-Copy-Item "wwwroot\images\event-banners\event-banner-3.jpg" "$env:USERPROFILE\Desktop\raceday-upload.jpg"
+Copy-Item "wwwroot\images\event-banners\event-banner-3.jpg" "$env:USERPROFILE\Videos\part3\raceday-upload.jpg"
 ```
 
 ### Resetting demo data
@@ -103,6 +104,10 @@ After a reseed the state is fixed and matches the narration:
 Record in four groups. Grouping is faster than following the narrative, and the
 voice-over is recorded afterwards, so the timeline decides the order.
 
+> The code group (C01-C09) is already recorded as `V01`-`V11` in
+> `C:\Users\lusan\Videos` and verified frame by frame. What remains is the
+> browser group (C10-C24), the ops group (C25-C26) and the close (C27).
+
 | Clip | Group | Narration section | Surface | Target | What happens |
 | --- | --- | --- | --- | --- | --- |
 | C01 | Code | 2 | VS | 35 s | Solution Explorer, three projects |
@@ -126,8 +131,8 @@ voice-over is recorded afterwards, so the timeline decides the order.
 | C19 | App | 6 | Browser | 30 s | Create event, empty submit, validation |
 | C20 | App | 6 | Browser | 30 s | Create event with banner |
 | C21 | App | 6 | Browser | 20 s | Add a category |
-| C22 | App | 6 | Browser | 25 s | Approve a pending enrolment |
-| C23 | App | 6 | Browser | 25 s | Capture a result |
+| C22 | App | 6 | Browser | 20 s | Enrolment list with the three status badges |
+| C23 | App | 6 | Browser | 35 s | Event 1 results table, then capture one result |
 | C24 | Azure | 7 | Browser | 20 s | Banner served from Azurite, blob listed |
 | C25 | Ops | 8 | Terminal | 30 s | `docker compose ps`, MVC, Swagger |
 | C26 | Ops | 8 | Browser | 35 s | Green GitHub Actions run |
@@ -155,12 +160,13 @@ All URLs are on the Docker stack. Passwords are `Password123!`.
 | B9 | `/Profile` | Choose `raceday-upload.jpg`, Upload | New profile picture |
 | B10 | Sign out, then `/Account/Login` | `demo.organiser@raceday.test` | Nav gains Dashboard and My events |
 | B11 | `/Organiser` | None | 5 events, 4 upcoming (one event date is in the past), 433 enrolments |
-| B12 | `/OrganiserEvents/Create` | Submit empty, then fill | Inline validation, values preserved |
+| B12 | `/organiser/events/create` | Submit empty, then fill | Inline validation, values preserved |
 | B13 | same form | Attach `raceday-upload.jpg`, save | New event card with uploaded banner |
-| B14 | `/OrganiserCategories?eventId=6` | Add `10 km`, 10, 250 | New row in the category table |
-| B15 | `/OrganiserEnrolments?eventId=2` | Approve one amber row | Row turns green Confirmed |
-| B16 | `/OrganiserResults?eventId=2` | Capture for the first confirmed runner: `01:58:24`, position `37` | Row shows `37th of ...` |
-| B17 | `/OrganiserEvents` | None | Banner grid, including the new event |
+| B14 | `/organiser/events/6/categories` | Add `10 km`, 10, 250 | New row in the category table |
+| B15 | `/organiser/events/4/enrolments` | Scroll the list | Three status badges; the view is read-only |
+| B16 | `/organiser/events/1/results` | Scroll the captured results | Rows reading `47th of 312` |
+| B17 | `/organiser/events/2/results/capture/319` | `01:58:24`, position `1`, save | New row in the results table |
+| B18 | `/organiser/events` | None | Banner grid, including the new event |
 
 Values used in B12 if the plan is followed exactly:
 
@@ -175,8 +181,16 @@ Values used in B12 if the plan is followed exactly:
 dashboard shows five events in the narration; after B13 there are six. Reseed
 before any second take of B11.
 
-**Don't be clever in B16.** Use a runner who has no result yet. If the page says
-there are no confirmed participants left, the event already has results — reseed.
+**Badge colours live on event 4.** Event 2 has only Confirmed and Pending
+enrolments. Durban Beachfront Cycle Tour (event 4) has 15 Confirmed, 10 Pending
+and 1 Cancelled, so that is the shot that shows three colours. The participant's
+own My Enrolments page (B7) also shows all three, drawn from events 1-4.
+
+**Don't be clever in B17.** Enrolment 319 has no result yet. Position `1` is
+deliberate: this event has only one captured result, so the table reads
+`1st of 1`. The strong `47th of 312` shot is B16, from the Pretoria event. If the
+capture page says there are no participants awaiting a result, the event already
+has one — reseed or pick another enrolment.
 
 ---
 

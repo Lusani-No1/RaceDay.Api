@@ -16,7 +16,7 @@ let the edit follow you. Both work; the second is faster.
 
 ## 1. Introduction — 0:00 to 0:45
 
-`[SCREEN]` Home page of the MVC app, not signed in.
+`[SCREEN]` Home page of the MVC app, signed in as the participant.
 
 > Hello. My name is [your name], student number [student number], and this is
 > Part 3 of my RaceDay portfolio of evidence for [module].
@@ -106,8 +106,11 @@ to 171.
 `[SCREEN]` Home page, Events list, event detail, enrol, My enrolments, My
 results, Profile.
 
-> The home page is public. It has a hero section and the upcoming events, each
-> with a banner image that the API serves.
+> Every page in this application needs a signed-in user. Sign-in and registration
+> are the only public pages.
+>
+> The home page is the participant's landing page. It has a hero section and the
+> upcoming events, each with a banner image that the API serves.
 >
 > The Events page lists every event and supports search and filtering by event
 > type.
@@ -151,14 +154,16 @@ results, Profile.
 > From My events I can manage everything for that event. Under Categories, I add
 > a category with its distance and price, and the table updates.
 >
-> Under Enrolments, every participant is listed with their status. I'll approve a
-> pending entry. The row changes from amber Pending to green Confirmed, and the
-> change is saved through the API.
+> Under Enrolments, every participant is listed with their status: Confirmed in
+> green, Pending in amber, Cancelled in red. This view is read-only for the
+> organiser. Entries change when a participant enrols or cancels, so the API
+> stays the only component that writes enrolment state.
 >
-> Under Results, confirmed participants without a result are listed. I'll capture
-> a result: a finish time and a finishing position. Once it is saved, the
-> organiser's table shows the position out of the total finishers — for example,
-> 47th of 312 — using exactly the same logic as the participant's page.
+> Under Results, the Pretoria Marathon already has 312 captured results, each
+> shown as a position out of the total finishers — for example, 47th of 312. For
+> an event with no results yet, the page lists the confirmed participants who are
+> still waiting. I'll capture one: a finish time and a position. It is saved
+> through the API and appears in the table immediately.
 >
 > Every write action — events, categories, enrolments and results — goes through
 > the API. The MVC application never writes to the database.
