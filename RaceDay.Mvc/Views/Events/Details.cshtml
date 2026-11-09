@@ -1,0 +1,185 @@
+@model EventDetailsViewModel
+@{
+    ViewData["Title"] = Model.Event.Name;
+    var ev = Model.Event;
+    var banner = ApiUrl.Resolve(ev.BannerUrl);
+    if (string.IsNullOrWhiteSpace(banner))
+        banner = ApiUrl.Resolve(ViewHelpers.DefaultBanner(ev.EventId));
+    var isPast = ev.EventDate < DateOnly.FromDateTime(DateTime.Today);
+    var isParticipant = User.IsInRole("Participant");
+    var isOwner = User.IsInRole("Organiser") && User.GetUserId() == ev.OrganiserId;
+}
+
+<a class="d-inline-block mb-3 small fw-semibold" asp-controller="Events" asp-action="Index">
+    ← Back to events
+</a>
+
+<div class="rd-fade-in">
+    @if (!string.IsNullOrWhiteSpace(banner))
+    {
+        <img class="rd-detail-banner mb-4" src="@banner" alt="@ev.Name banner" />
+    }
+    else
+    {
+        <div class="rd-detail-placeholder mb-4"><span>@ViewHelpers.EventTypeIcon(ev.EventType)</span></div>
+    }
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                <span class="rd-chip">@ViewHelpers.EventTypeIcon(ev.EventType) @ev.EventType</span>
+                <span class="rd-chip">@ev.DistanceKm.ToString("0.##") km</span>
+                @if (isPast)
+                {
+                    <span class="badge bg-dark">Completed</span>
+                }
+                else
+                {
+                    <span class="badge bg-success">Upcoming</span>
+                }
+            </div>
+
+            <h1 class="display-6 rd-section-title mb-2">@ev.Name</h1>
+            <p class="text-muted mb-3">
+                @ev.EventDate.ToString("dddd, dd MMMM yyyy") · @ev.Location · Hosted by @ev.OrganiserName
+            </p>
+
+            @if (!string.IsNullOrWhiteSpace(ev.Description))
+            {
+                <p class="mb-4">@ev.Description</p>
+            }
+
+            <h2 class="h4 rd-section-title mt-4 mb-3">Categories</h2>
+
+            @if (ev.Categories.Count == 0)
+            {
+                <div class="rd-empty-state py-4">
+                    <p class="mb-0 text-muted">This event has no categories yet.</p>
+                </div>
+            }
+            else
+            {
+                <div class="rd-table">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Distance</th>
+                                <th>Age</th>
+                                <th class="text-end">Entry fee</th>
+                                @if (isParticipant)
+                                {
+                                    <th class="text-end">Entry</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var category in ev.Categories)
+                            {
+                                <tr>
+                                    <td class="fw-semibold">@category.Name</td>
+                                    <td>@(category.DistanceKm is null ? "—" : $"{category.DistanceKm:0.##} km")</td>
+                                    <td>
+                                        @if (category.MinAge is null && category.MaxAge is null)
+                                        {
+                                            <span>Open</span>
+                                        }
+                                        else if (category.MinAge is not null && category.MaxAge is not null)
+                                        {
+                                            <span>@category.MinAge–@category.MaxAge</span>
+                                        }
+                                        else if (category.MinAge is not null)
+                                        {
+                                            <span>@category.MinAge+</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Up to @category.MaxAge</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">R @category.Price.ToString("0.00")</td>
+                                    @if (isParticipant)
+                                    {
+                                        <td class="text-end">
+                                            @if (Model.AlreadyEnrolled)
+                                            {
+                                                <span class="badge badge-confirmed">Enrolled</span>
+                                            }
+                                            else if (isPast)
+                                            {
+                                                <span class="text-muted small">Closed</span>
+                                            }
+                                            else
+                                            {
+                                                <form method="post" asp-controller="Enrolments" asp-action="Enrol" class="d-inline">
+                                                    <input type="hidden" name="categoryId" value="@category.CategoryId" />
+                                                    <input type="hidden" name="eventId" value="@ev.EventId" />
+                                                    <button type="submit" class="btn btn-sm btn-primary">Enrol</button>
+                                                </form>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <h2 class="h6 text-uppercase text-muted fw-bold mb-3">Event details</h2>
+                    <div class="rd-info-grid">
+                        <div class="rd-info-tile">
+                            <span class="label">Date</span>
+                            <span class="value">@ev.EventDate.ToString("dd MMM yyyy")</span>
+                        </div>
+                        <div class="rd-info-tile">
+                            <span class="label">Distance</span>
+                            <span class="value">@ev.DistanceKm.ToString("0.##") km</span>
+                        </div>
+                        <div class="rd-info-tile">
+                            <span class="label">Location</span>
+                            <span class="value">@ev.Location</span>
+                        </div>
+                        <div class="rd-info-tile">
+                            <span class="label">Organiser</span>
+                            <span class="value">@ev.OrganiserName</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.AlreadyEnrolled)
+            {
+                <div class="alert alert-success">
+                    <p class="mb-2 fw-semibold">You are enrolled for this event.</p>
+                    <a class="btn btn-sm btn-success" asp-controller="Enrolments" asp-action="Index">View my enrolments</a>
+                </div>
+            }
+            else if (isParticipant && !isPast && ev.Categories.Count > 0)
+            {
+                <div class="alert alert-light border">
+                    Choose a category above to enter this event.
+                </div>
+            }
+
+            @if (isOwner)
+            {
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h6 text-uppercase text-muted fw-bold mb-3">Organiser tools</h2>
+                        <div class="d-grid gap-2">
+                            <a class="btn btn-outline-primary" asp-controller="OrganiserEvents" asp-action="Edit" asp-route-id="@ev.EventId">Edit event</a>
+                            <a class="btn btn-outline-primary" asp-controller="OrganiserCategories" asp-action="Index" asp-route-eventId="@ev.EventId">Manage categories</a>
+                            <a class="btn btn-outline-primary" asp-controller="OrganiserEnrolments" asp-action="Index" asp-route-eventId="@ev.EventId">View enrolments</a>
+                            <a class="btn btn-outline-primary" asp-controller="OrganiserResults" asp-action="Index" asp-route-eventId="@ev.EventId">Capture results</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

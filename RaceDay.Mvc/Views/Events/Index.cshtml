@@ -1,0 +1,66 @@
+@model EventListViewModel
+@{
+    ViewData["Title"] = "Events";
+    var types = new[] { "All", "Run", "Walk", "Cycle" };
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <div class="rd-kicker text-orange">Race calendar</div>
+        <h1 class="h2 rd-section-title mb-1">All events</h1>
+        <p class="text-muted mb-0">Browse every event on RaceDay.</p>
+    </div>
+    @if (User.IsInRole("Organiser"))
+    {
+        <a class="btn btn-primary" asp-controller="OrganiserEvents" asp-action="Create">Create event</a>
+    }
+</div>
+
+<form class="rd-filter-bar mb-4" method="get" asp-action="Index">
+    <div class="row g-2 align-items-end">
+        <div class="col-lg-4">
+            <label class="form-label small fw-semibold" for="search">Search</label>
+            <input id="search" name="search" value="@Model.Search" class="form-control"
+                   placeholder="Event name or location" />
+        </div>
+        <div class="col-lg-2">
+            <label class="form-label small fw-semibold" for="type">Type</label>
+            <select id="type" name="type" class="form-select">
+                @foreach (var option in types)
+                {
+                    <option value="@option" selected="@(Model.Type == option || (string.IsNullOrEmpty(Model.Type) && option == "All"))">@option</option>
+                }
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <label class="form-label small fw-semibold" for="from">From date</label>
+            <input id="from" name="from" type="date" value="@Model.From?.ToString("yyyy-MM-dd")" class="form-control" />
+        </div>
+        <div class="col-lg-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+        <div class="col-lg-1">
+            <a class="btn btn-outline-secondary w-100" asp-action="Index" title="Reset">Reset</a>
+        </div>
+    </div>
+</form>
+
+@if (Model.Events.Count > 0)
+{
+    <div class="row g-4">
+        @foreach (var ev in Model.Events)
+        {
+            <div class="col-md-6 col-xl-4">
+                <partial name="_EventCard" model="ev" />
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="rd-empty-state">
+        <h3 class="h4">No events found</h3>
+        <p class="text-muted mb-3">Try clearing the filters.</p>
+        <a class="btn btn-outline-primary" asp-action="Index">Show all events</a>
+    </div>
+}
