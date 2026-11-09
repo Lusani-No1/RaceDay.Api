@@ -32,12 +32,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
 // Uploaded images: Azure Blob Storage when configured, otherwise local wwwroot/uploads.
-builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Storage"));
-var storageProvider = builder.Configuration["Storage:Provider"] ?? "Local";
-if (storageProvider.Equals("Azure", StringComparison.OrdinalIgnoreCase))
-    builder.Services.AddSingleton<IFileStorage, AzureBlobFileStorage>();
-else
-    builder.Services.AddSingleton<IFileStorage, LocalFileStorage>();
+builder.Services.AddRaceDayFileStorage(builder.Configuration);
 
 // Session management: login issues an encrypted cookie holding the user's id and role
 builder.Services

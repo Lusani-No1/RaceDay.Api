@@ -50,9 +50,9 @@ Part 1 - System Planning and Database
 
 Everything for Part 1 is in /docs:
 
-- ERD -six entities (Users, UserProfiles, Events, Categories, Enrolments, Results) with primary keys, foreign keys and cardinality.
-- Endpoint plan -every endpoint with method, route, description, role required, request body and expected responses.
-- SQL script -creates the schema for SQL Server and seeds two Organisers, two Participants, three Events, categories, enrolments and results. Open it in SSMS and click Execute; it can be re-run on a clean instance.
+- ERD - six entities (Users, UserProfiles, Events, Categories, Enrolments, Results) with primary keys, foreign keys and cardinality.
+- Endpoint plan - every endpoint with method, route, description, role required, request body and expected responses.
+- SQL script - creates the schema for SQL Server and seeds two Organisers, two Participants, three Events, categories, enrolments and results. Open it in SSMS and click Execute; it can be re-run on a clean instance.
 
 Part 1 video: https://youtu.be/tNPN8o0Gkxo
 
@@ -74,38 +74,48 @@ Prerequisites
 
 Setup and run
 
-1. Clone the repository
-  
+1. Clone the repository:
+
+   ```bash
    git clone <your-repository-url>
-   
-2. Set the connection string. Open appsettings.json in the repository root and change Server= to your own SQL Server instance, for example localhost\\SQLEXPRESS:
-   json
+   ```
+
+2. Set the connection string. Open `appsettings.json` in the repository root and change `Server=` to your own SQL Server instance, for example `localhost\SQLEXPRESS`:
+
+   ```json
    "ConnectionStrings": {
      "DefaultConnection": "Server=YOUR_SERVER\\SQLEXPRESS;Database=RaceDayApiDb;Trusted_Connection=True;TrustServerCertificate=True;"
    }
-  
-3. Check the Organiser access code. appsettings.json has an Auth:OrganiserAccessCode value. This code is required to register as an Organiser . The development value is RACEDAY-ORG-2026.
+   ```
 
-4. Create the database. In Visual Studio open Tools > NuGet Package Manager > Package Manager Console and run:
-   
+3. Check the Organiser access code. `appsettings.json` has an `Auth:OrganiserAccessCode` value. This code is required to register as an Organiser. The development value is `RACEDAY-ORG-2026`.
+
+4. Create the database. In Visual Studio open **Tools > NuGet Package Manager > Package Manager Console** and run:
+
+   ```powershell
    Update-Database
-   
+   ```
+
    Or, from the repository root:
-   
+
+   ```bash
    dotnet ef database update
-   
-   This creates RaceDayApiDb with all six tables from the migrations.
-5. Run the API. Press F5 in Visual Studio (choose the **https** profile), or run dotnet run in the repository root.
-6. Open Swagger. Browse to https://localhost:7089/swagger`. Every endpoint can be tried from this page.
+   ```
+
+   This creates `RaceDayApiDb` with all six tables from the migrations.
+
+5. Run the API. Press **F5** in Visual Studio (choose the **https** profile), or run `dotnet run` in the repository root.
+
+6. Open Swagger. Browse to `https://localhost:7089/swagger`. Every endpoint can be tried from this page.
 
 Trying the API in Swagger
 
-1. POST /api/auth/register - create a Participant ("role": "Participant") or an Organiser ("role": "Organiser"plus the organiserAccessCode`).
-2. POST /api/auth/login - log in. The browser stores the session cookie, so later requests from the Swagger page are authenticated automatically.
+1. `POST /api/auth/register` - create a Participant (`"role": "Participant"`) or an Organiser (`"role": "Organiser"` plus the `organiserAccessCode`).
+2. `POST /api/auth/login` - log in. The browser stores the session cookie, so later requests from the Swagger page are authenticated automatically.
 3. Call any endpoint. A missing session returns 401; the wrong role or someone else's record returns 403.
-4. POST /api/auth/logout ends the session.
+4. `POST /api/auth/logout` ends the session.
 
-Use one address (https://localhost:7089 or http://localhost:5062) for a whole session, because each address has its own cookie.
+Use one address (`https://localhost:7089` or `http://localhost:5062`) for a whole session, because each address has its own cookie.
 
 Endpoints
 
@@ -144,7 +154,7 @@ Design decisions
 - Passwords are salted and hashed with ASP.NET Core's PasswordHasher; the plain password is never stored. Login failures use one message for both "unknown email" and "wrong password".
 - Organiser registration. Users choose their role when registering, but registering as an Organiser also needs a secret access code held in configuration. Without it, anyone could make themselves an Organiser.
 - Ownership checks. Role alone is not enough: an Organiser can only change their own events, categories, enrolment views and results, and a Participant can only see or cancel their own enrolments.
-- Cancelling an enrolment** sets its status to Cancelled instead of deleting it, so history is kept. Enrolling in the same category again re-activates the record.
+- Cancelling an enrolment sets its status to Cancelled instead of deleting it, so history is kept. Enrolling in the same category again re-activates the record.
 - Protected deletes. An event or category that already has enrolments cannot be deleted (409), because enrolments are not cascade-deleted in the schema.
 - Categories can be distance-based (10km), age-based (Under 20, Senior), or both.
 
@@ -166,11 +176,13 @@ dotnet test
 
 The tests cover success and failure cases for:
 
-- Registration and login- both roles, duplicate emails, invalid input, the Organiser access code, hashed passwords, wrong credentials, sessions and logout, and 401 for every protected endpoint without a login.
-- Event management- Organisers creating, updating and deleting their own events and categories, invalid data, and missing records.
-- Role enforcement- Participants rejected from Organiser actions, Organisers rejected from Participant actions, and one Organiser rejected from another Organiser's event.
-- Event enrolments- Participants enrolling and the enrolment being recorded against the right event and category, duplicate enrolments, cancelling and re-enrolling, and enrolment privacy between users.
-- Results- Organisers capturing and correcting results, Participants viewing only their own, and the rules around cancelled enrolments.
+- Registration and login - both roles, duplicate emails, invalid input, the Organiser access code, hashed passwords, wrong credentials, sessions and logout, and 401 for every protected endpoint without a login.
+- Event management - Organisers creating, updating and deleting their own events and categories, invalid data, and missing records.
+- Role enforcement - Participants rejected from Organiser actions, Organisers rejected from Participant actions, and one Organiser rejected from another Organiser's event.
+- Event enrolments - Participants enrolling and the enrolment being recorded against the right event and category, duplicate enrolments, cancelling and re-enrolling, and enrolment privacy between users.
+- Results - Organisers capturing and correcting results, Participants viewing only their own, and the rules around cancelled enrolments.
+- Image uploads - banner and profile-picture uploads, the 5 MB and file-type rules, replacing an old image, ownership and role checks, and 401 without a session.
+- Storage providers - local storage is the default, `Storage:Provider=Azure` selects the Azure Blob Storage provider, and a missing Azure connection string fails fast.
 
 The in-memory database does not enforce unique indexes or check constraints, so these tests check the API's own validation. The database-level constraints are shown by the SQL script in Part 1.
 
@@ -432,6 +444,8 @@ _[Insert screenshot]_
 Part 3 video
 
 _[Insert link]_
+
+The recording checklist is in `docs/Video_Walkthrough.md`.
 
 
  AI use disclosure
