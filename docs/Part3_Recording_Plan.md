@@ -317,6 +317,21 @@ easier to cut.
 
 ## 10. CapCut assembly
 
+The draft **RaceDay Part 3** in `%LOCALAPPDATA%\CapCut\User Data\Projects\com.lveditor.draft`
+already contains this assembly — 36 clips, 204 captions, 12:11.640 — so the steps
+below are only the manual equivalent.
+
+> **Strip the OBS audio before importing.** OBS records an Opus track into its MKV
+> files, and CapCut cannot demux Opus out of MP4: the project loads and then the
+> application quits. The clips in `Videos\part3` have already been flattened to
+> video only; the original takes with audio are in `Videos\part3\withaudio`.
+>
+> ```powershell
+> ffmpeg -i in.mp4 -map 0:v -c:v copy -an out.mp4
+> ```
+>
+> The screen recordings are silent anyway, so nothing is lost.
+
 1. New project: **1920 x 1080, 30 fps**.
 2. Import every MP4 and the nine voice files (`S1` to `S9`, one per narration
    section).
