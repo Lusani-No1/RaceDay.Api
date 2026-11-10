@@ -489,9 +489,13 @@ On Linux, add `--add-host=host.docker.internal:host-gateway` to the `docker run`
 
 _[Insert link — unlisted YouTube]_
 
-The recording is produced from three documents:
+The recording is produced from these documents:
 
-- `docs/Part3_Narration.md` — the full spoken script, section by section.
+- `docs/Part3_Voiceover_Script.md` — the read-aloud script, split into the nine
+  sections of the edit, with the exact start time and length of each section.
+- `docs/Part3_Captions.srt` — the same words as a subtitle file, timed to the
+  edit, so the captions can be imported into any editor.
+- `docs/Part3_Narration.md` — the full spoken script with the screen cues.
 - `docs/Part3_Recording_Plan.md` — OBS setup, clip list, exact file and line
   cues, and the CapCut edit sheet.
 - `docs/Video_Walkthrough.md` — the short assessment-mapped running order.

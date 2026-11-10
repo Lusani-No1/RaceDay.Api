@@ -575,241 +575,241 @@ API. The MVC application never writes to
 the database.
 
 145
-00:07:46,760 --> 00:07:52,006
+00:07:46,760 --> 00:07:52,022
 Image uploads go through the API as well.
 
 146
-00:07:52,006 --> 00:07:56,597
+00:07:52,022 --> 00:07:56,627
 Storage sits behind an interface called IFileStorage,
 
 147
-00:07:56,597 --> 00:07:59,876
+00:07:56,627 --> 00:07:59,916
 with two implementations, and FileStorageRegistration
 
 148
-00:07:59,876 --> 00:08:03,811
+00:07:59,916 --> 00:08:03,863
 chooses between them once at startup.
 
 149
-00:08:03,811 --> 00:08:08,401
+00:08:03,863 --> 00:08:08,467
 When the provider is set to Azure,
 
 150
-00:08:08,401 --> 00:08:10,369
+00:08:08,467 --> 00:08:10,441
 it registers AzureBlobFileStorage.
 
 151
-00:08:10,369 --> 00:08:14,304
+00:08:10,441 --> 00:08:14,388
 Otherwise it registers the local provider
 
 152
-00:08:14,304 --> 00:08:19,550
+00:08:14,388 --> 00:08:19,650
 that writes into wwwroot. The rest of the
 
 153
-00:08:19,550 --> 00:08:23,485
+00:08:19,650 --> 00:08:23,597
 application only depends on the interface.
 
 154
-00:08:23,485 --> 00:08:26,764
+00:08:23,597 --> 00:08:26,886
 AzureBlobFileStorage uses a blob container
 
 155
-00:08:26,764 --> 00:08:32,011
+00:08:26,886 --> 00:08:32,149
 client. It creates the container if it does
 
 156
-00:08:32,011 --> 00:08:37,257
+00:08:32,149 --> 00:08:37,411
 not exist, uploads the stream with a content
 
 157
-00:08:37,257 --> 00:08:42,504
+00:08:37,411 --> 00:08:42,674
 type and a generated name, and returns the
 
 158
-00:08:42,504 --> 00:08:47,095
+00:08:42,674 --> 00:08:47,279
 public URL. Deleting an image removes the
 
 159
-00:08:47,095 --> 00:08:47,751
+00:08:47,279 --> 00:08:47,937
 blob.
 
 160
-00:08:47,751 --> 00:08:51,685
+00:08:47,937 --> 00:08:51,883
 To demonstrate this honestly, without an
 
 161
-00:08:51,685 --> 00:08:56,276
+00:08:51,883 --> 00:08:56,488
 Azure subscription, I am running the Azurite
 
 162
-00:08:56,276 --> 00:09:00,211
+00:08:56,488 --> 00:09:00,435
 storage emulator, which implements the same
 
 163
-00:09:00,211 --> 00:09:06,113
+00:09:00,435 --> 00:09:06,355
 Blob API. The provider is set to Azure and
 
 164
-00:09:06,113 --> 00:09:10,048
+00:09:06,355 --> 00:09:10,302
 the connection string points at Azurite.
 
 165
-00:09:10,048 --> 00:09:15,295
+00:09:10,302 --> 00:09:15,565
 Uploading a banner now writes a real blob,
 
 166
-00:09:15,295 --> 00:09:20,541
+00:09:15,565 --> 00:09:20,827
 and the API serves that URL straight back
 
 167
-00:09:20,541 --> 00:09:25,788
+00:09:20,827 --> 00:09:26,090
 to the MVC application. None of this storage
 
 168
-00:09:25,788 --> 00:09:31,690
+00:09:26,090 --> 00:09:32,010
 code is in the MVC project. The web application
 
 169
-00:09:31,690 --> 00:09:34,970
+00:09:32,010 --> 00:09:35,300
 only ever receives a URL.
 
 170
-00:09:34,970 --> 00:09:40,796
+00:09:35,300 --> 00:09:41,126
 The whole system runs in Docker. The API
 
 171
-00:09:40,796 --> 00:09:47,350
+00:09:41,126 --> 00:09:47,680
 and the MVC app each have a multi-stage Dockerfile:
 
 172
-00:09:47,350 --> 00:09:52,448
+00:09:47,680 --> 00:09:52,778
 restore and publish in the SDK image,
 
 173
-00:09:52,448 --> 00:09:57,546
+00:09:52,778 --> 00:09:57,876
 then copy only the published output into
 
 174
-00:09:57,546 --> 00:10:00,459
+00:09:57,876 --> 00:10:00,789
 the small runtime image.
 
 175
-00:10:00,459 --> 00:10:04,100
+00:10:00,789 --> 00:10:04,430
 Docker Compose defines three services:
 
 176
-00:10:04,100 --> 00:10:09,926
+00:10:04,430 --> 00:10:10,256
 SQL Server on 1433, the API on 8080,
 
 177
-00:10:09,926 --> 00:10:14,296
+00:10:10,256 --> 00:10:14,626
 and the MVC application on 8081.
 
 178
-00:10:14,296 --> 00:10:18,665
+00:10:14,626 --> 00:10:18,995
 The connection string, the organiser access
 
 179
-00:10:18,665 --> 00:10:24,491
+00:10:18,995 --> 00:10:24,821
 code and the storage provider all come from
 
 180
-00:10:24,491 --> 00:10:28,861
+00:10:24,821 --> 00:10:29,191
 environment variables in the Compose file,
 
 181
-00:10:28,861 --> 00:10:35,415
+00:10:29,191 --> 00:10:35,745
 so the same images can run against a different
 
 182
-00:10:35,415 --> 00:10:39,785
+00:10:35,745 --> 00:10:40,115
 database, or a real Azure account,
 
 183
-00:10:39,785 --> 00:10:41,970
+00:10:40,115 --> 00:10:42,300
 without a rebuild.
 
 184
-00:10:41,970 --> 00:10:46,339
+00:10:42,300 --> 00:10:46,669
 One command starts everything: docker compose
 
 185
-00:10:46,339 --> 00:10:52,165
+00:10:46,669 --> 00:10:52,495
 up, with the build flag. The API applies
 
 186
-00:10:52,165 --> 00:10:57,991
+00:10:52,495 --> 00:10:58,321
 its migrations at startup, and the MVC app
 
 187
-00:10:57,991 --> 00:11:03,089
+00:10:58,321 --> 00:11:03,419
 reaches the API through the service name
 
 188
-00:11:03,089 --> 00:11:09,644
+00:11:03,419 --> 00:11:09,974
 on the Compose network, so there are no hard-coded
 
 189
-00:11:09,644 --> 00:11:11,100
+00:11:09,974 --> 00:11:11,430
 host addresses.
 
 190
-00:11:11,100 --> 00:11:15,470
+00:11:11,430 --> 00:11:15,800
 Here are the three containers running,
 
 191
-00:11:15,470 --> 00:11:21,296
+00:11:15,800 --> 00:11:21,626
 the MVC app answering on 8081, and Swagger
 
 192
-00:11:21,296 --> 00:11:24,937
+00:11:21,626 --> 00:11:25,267
 documenting the API on 8080.
 
 193
-00:11:24,937 --> 00:11:29,307
+00:11:25,267 --> 00:11:29,637
 The pipeline is in GitHub Actions.
 
 194
-00:11:29,307 --> 00:11:35,133
+00:11:29,637 --> 00:11:35,463
 On every push it restores and builds the
 
 195
-00:11:35,133 --> 00:11:40,231
+00:11:35,463 --> 00:11:40,561
 whole solution in Release, runs the eighty-five
 
 196
-00:11:40,231 --> 00:11:45,329
+00:11:40,561 --> 00:11:45,659
 tests, publishes the MVC project, and uploads
 
 197
-00:11:45,329 --> 00:11:49,698
+00:11:45,659 --> 00:11:50,028
 the publish output as an artifact.
 
 198
-00:11:49,698 --> 00:11:53,340
+00:11:50,028 --> 00:11:53,670
 The latest run is green.
 
 199
-00:11:53,340 --> 00:11:57,493
+00:11:53,670 --> 00:11:57,823
 That is Part 3: an MVC application that consumes
 
 200
-00:11:57,493 --> 00:12:00,724
+00:11:57,823 --> 00:12:01,054
 the Part 2 API, with session-based authentication,
 
 201
-00:12:00,724 --> 00:12:02,570
+00:12:01,054 --> 00:12:02,900
 role-based navigation, complete participant
 
 202
-00:12:02,570 --> 00:12:05,340
+00:12:02,900 --> 00:12:05,670
 and organiser journeys, Azure Blob Storage
 
 203
-00:12:05,340 --> 00:12:09,493
+00:12:05,670 --> 00:12:09,823
 behind the API, and a Docker and CI pipeline.
 
 204
-00:12:09,493 --> 00:12:11,340
+00:12:09,823 --> 00:12:11,670
 Thank you for watching.

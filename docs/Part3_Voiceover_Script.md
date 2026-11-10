@@ -11,7 +11,7 @@ the CapCut timeline *RaceDay Part 3* exactly.
 - If a line is too long for one breath, split it at a comma and keep the
   same words in the same order.
 
-Total length of the edit: **12:11.340** (9 sections).
+Total length of the edit: **12:11.670** (9 sections).
 
 | Section | Starts | Length | Words | Pace |
 | --- | --- | --- | --- | --- |
@@ -21,9 +21,9 @@ Total length of the edit: **12:11.340** (9 sections).
 | S4 — Sign in and role-based navigation | 03:30.400 | 00:34.370 | 99 | 173 wpm |
 | S5 — The participant journey | 04:04.770 | 01:40.410 | 180 | 108 wpm |
 | S6 — The organiser journey | 05:45.180 | 02:01.580 | 231 | 114 wpm |
-| S7 — Azure Blob Storage | 07:46.760 | 01:48.210 | 165 | 91 wpm |
-| S8 — Docker and continuous integration | 09:34.970 | 02:18.370 | 190 | 82 wpm |
-| S9 — Close | 11:53.340 | 00:18.000 | 39 | 130 wpm |
+| S7 — Azure Blob Storage | 07:46.760 | 01:48.540 | 165 | 91 wpm |
+| S8 — Docker and continuous integration | 09:35.300 | 02:18.370 | 190 | 82 wpm |
+| S9 — Close | 11:53.670 | 00:18.000 | 39 | 130 wpm |
 
 ---
 
@@ -97,7 +97,7 @@ Under Results, the Pretoria Marathon already has three hundred and twelve captur
 For an event with no results yet, the page lists the confirmed participants who are still waiting. I capture one, with a finish time and a position. It is saved through the API and appears in the table immediately.  
 Every write action, for events, categories, enrolments and results, goes through the API. The MVC application never writes to the database.  
 
-## S7 — Azure Blob Storage   `07:46.760 · 01:48.210 · 165 words · 91 wpm`
+## S7 — Azure Blob Storage   `07:46.760 · 01:48.540 · 165 words · 91 wpm`
 
 *The IFileStorage abstraction, the Azure implementation, the configuration, then a banner uploaded through Azurite.*
 
@@ -107,7 +107,7 @@ AzureBlobFileStorage uses a blob container client. It creates the container if i
 To demonstrate this honestly, without an Azure subscription, I am running the Azurite storage emulator, which implements the same Blob API. The provider is set to Azure and the connection string points at Azurite.  
 Uploading a banner now writes a real blob, and the API serves that URL straight back to the MVC application. None of this storage code is in the MVC project. The web application only ever receives a URL.  
 
-## S8 — Docker and continuous integration   `09:34.970 · 02:18.370 · 190 words · 82 wpm`
+## S8 — Docker and continuous integration   `09:35.300 · 02:18.370 · 190 words · 82 wpm`
 
 *Compose file, Dockerfiles, CI workflow, the running containers, Swagger and the green GitHub Actions run.*
 
@@ -119,7 +119,7 @@ Here are the three containers running, the MVC app answering on 8081, and Swagge
 The pipeline is in GitHub Actions. On every push it restores and builds the whole solution in Release, runs the eighty-five tests, publishes the MVC project, and uploads the publish output as an artifact.  
 The latest run is green.  
 
-## S9 — Close   `11:53.340 · 00:18.000 · 39 words · 130 wpm`
+## S9 — Close   `11:53.670 · 00:18.000 · 39 words · 130 wpm`
 
 *End card.*
 
