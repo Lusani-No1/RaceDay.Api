@@ -99,15 +99,17 @@ command, and I can switch it on for you and switch it back afterwards:
 docker compose -f docker-compose.yml -f docker-compose.azure.yml up -d
 ```
 
-Then, as the organiser, replace an event banner. The image URL will start with
-`http://localhost:10000/devstoreaccount1/raceday/`, which proves the upload went
-to blob storage rather than the local disk. Say the line from the narration: it
-is the official emulator, the same code path runs against a real account, only
-the connection string changes.
+Then, as the organiser, replace an event banner. Keep the browser window
+**maximised, not fullscreen**, so the address bar is visible: the image URL will
+start with `http://localhost:10000/devstoreaccount1/raceday/`, which proves the
+upload went to blob storage rather than the local disk. Say the line from the
+narration: it is the official emulator, the same code path runs against a real
+account, only the connection string changes.
 
 **Voice-over.** Nine sections, one audio file each, script in
-`docs/Part3_Narration.md` (about 10:45 spoken). Record section by section so a
-fluffed line costs seconds, not minutes.
+`docs/Part3_Voiceover_Script.md` (12:11 of edit, with the start time and length
+of every section). Record section by section so a fluffed line costs seconds,
+not minutes.
 
 ---
 
