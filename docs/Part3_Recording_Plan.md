@@ -342,30 +342,33 @@ below are only the manual equivalent.
 5. Add a 4-second title card at the start: your name, student number, module,
    "Part 3 — MVC web application".
 6. Add an end card: repository URL and "Thank you for watching".
-7. Captions: auto-caption, then fix these terms by hand — RaceDay, RaceDayApiClient,
-   IFileStorage, AzureBlobFileStorage, Azurite, DbContext, QuickSync, GUID,
-   `RaceDay.Session`, `RACEDAY-ORG-2026`.
-8. Audio: normalise voice to about **-14 LUFS**. If you add music, keep it at
-   -28 dB and duck under speech. The screen clips are silent, so there is nothing
-   to clean.
+7. Captions are already written — 204 lines, timed to the clips, using the
+   correct spelling of RaceDay, RaceDayApiClient, IFileStorage,
+   AzureBlobFileStorage, Azurite, DbContext, QuickSync, GUID, `RaceDay.Session`
+   and `RACEDAY-ORG-2026`. Only edit them if the spoken words change.
+8. Audio: keep one microphone and one gain setting for all nine sections, so the
+   voice does not jump between files. If you add music, keep it at -28 dB and
+   duck under speech. The screen clips are silent, so there is nothing to clean.
 9. Optional polish: a 1.15x scale keyframe on the code close-ups, held for four
    seconds, so line numbers are readable on a phone. Do not zoom on scrolling
    shots; the motion looks bad.
 10. Export: H.264, 1080p, 30 fps, 12 Mbps, AAC 192 kbps.
 
-### Section timings to aim for
+### Section timings of the edit
 
-| Section | Narration | Target start |
-| --- | --- | --- |
-| 1 | Introduction | 0:00 |
-| 2 | Solution structure | 0:45 |
-| 3 | Consuming the API | 1:55 |
-| 4 | Sign-in and role-based nav | 3:20 |
-| 5 | Participant journey | 4:30 |
-| 6 | Organiser journey | 6:30 |
-| 7 | Azure Blob Storage | 8:50 |
-| 8 | Docker and CI | 10:00 |
-| 9 | Close | 11:20 |
+These are the exact timings in the draft. Drop each voice file at its start time.
+
+| Section | Narration | Starts | Length |
+| --- | --- | --- | --- |
+| 1 | Introduction | 00:00.000 | 00:40.900 |
+| 2 | Solution structure | 00:40.900 | 01:03.770 |
+| 3 | Consuming the API | 01:44.670 | 01:45.730 |
+| 4 | Sign-in and role-based nav | 03:30.400 | 00:34.370 |
+| 5 | Participant journey | 04:04.770 | 01:40.400 |
+| 6 | Organiser journey | 05:45.170 | 02:01.570 |
+| 7 | Azure Blob Storage | 07:46.740 | 01:48.540 |
+| 8 | Docker and CI | 09:35.280 | 02:18.360 |
+| 9 | Close | 11:53.640 | 00:18.000 |
 
 ---
 
@@ -388,7 +391,7 @@ below are only the manual equivalent.
 ## 12. After recording
 
 1. Upload to YouTube as **unlisted**. Title: `RaceDay Part 3 — MVC Web Application Walkthrough`.
-2. Replace `_[Insert link]_` in `README.md` with the video URL.
+2. Replace `_[Insert link — unlisted YouTube]_` in `README.md` with the video URL.
 3. Commit and push; confirm the CI run is green.
 4. Replace the duplicated Part 2 video link at the top of the README — it
    currently repeats the Part 1 URL.
