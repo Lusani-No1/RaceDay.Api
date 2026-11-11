@@ -39,8 +39,10 @@ and editing.
 
 **Say:**
 
-> Hi, I'm [your name], student number [your number]. This is Part 3 of my RaceDay
+> Hi, I'm Lusani Mudau, student number ST10474461. This is Part 3 of my RaceDay
 > Portfolio of Evidence: the MVC web application that consumes my Part 2 API.
+>
+> Module: PROG6222.
 
 **Edit:** Add a text overlay with your name, student number and module code.
 

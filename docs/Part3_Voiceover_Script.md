@@ -4,7 +4,7 @@ Generated from the same data as the edited video, so the timings below match
 the CapCut timeline *RaceDay Part 3* exactly.
 
 - Read one line, then breathe. A full stop ends a sentence; keep going.
-- Replace **`[your name]`**, **`[student number]`** and **`[module]`**.
+- The presenter details are filled in: Lusani Mudau, ST10474461, PROG6222.
 - Do not read the section headings or the notes in italics.
 - Record one file per section, `S1` to `S9`, and drop each file at the
   section start time. That keeps the captions in step with your voice.
@@ -15,7 +15,7 @@ Total length of the edit: **12:11.640** (9 sections).
 
 | Section | Starts | Length | Words | Pace |
 | --- | --- | --- | --- | --- |
-| S1 — Introduction | 00:00.000 | 00:40.900 | 118 | 173 wpm |
+| S1 — Introduction | 00:00.000 | 00:40.900 | 117 | 172 wpm |
 | S2 — Solution structure | 00:40.900 | 01:03.770 | 141 | 133 wpm |
 | S3 — Consuming the API | 01:44.670 | 01:45.730 | 159 | 90 wpm |
 | S4 — Sign in and role-based navigation | 03:30.400 | 00:34.370 | 99 | 173 wpm |
@@ -27,11 +27,11 @@ Total length of the edit: **12:11.640** (9 sections).
 
 ---
 
-## S1 — Introduction   `00:00.000 · 00:40.900 · 118 words · 173 wpm`
+## S1 — Introduction   `00:00.000 · 00:40.900 · 117 words · 172 wpm`
 
 *Title card, then the public sign-in and registration pages, then the participant home page.*
 
-Hello. My name is [your name], student number [student number], and this is Part 3 of my RaceDay portfolio of evidence for [module].  
+Hello. My name is Lusani Mudau, student number ST10474461, and this is Part 3 of my RaceDay portfolio of evidence for PROG6222.  
 Part 1 planned the system and designed the database. Part 2 built the REST API. Part 3, this video, is the MVC web application that consumes that API.  
 Sign-in and registration are the only public pages. A new organiser account also needs the access code, RACEDAY-ORG-2026.  
 From here, every request follows one path. The browser talks to the MVC application, the MVC application talks to the API, and only the API talks to SQL Server.  

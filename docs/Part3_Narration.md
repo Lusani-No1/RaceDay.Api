@@ -7,7 +7,7 @@ memorised: read it at a relaxed pace, roughly **130 words per minute**.
 - Words in this script: about 1,420.
 - `[SCREEN]` lines tell you what should be visible while you say the paragraph
   below them. They are cues, not spoken text.
-- Replace `[your name]`, `[student number]` and `[module]` before recording.
+- The presenter details are filled in: Lusani Mudau, ST10474461, PROG6222.
 
 Record the narration **after** the screen clips are cut, or record it freely and
 let the edit follow you. Both work; the second is faster.
@@ -18,8 +18,8 @@ let the edit follow you. Both work; the second is faster.
 
 `[SCREEN]` Home page of the MVC app, signed in as the participant.
 
-> Hello. My name is [your name], student number [student number], and this is
-> Part 3 of my RaceDay portfolio of evidence for [module].
+> Hello. My name is Lusani Mudau, student number ST10474461, and this is
+> Part 3 of my RaceDay portfolio of evidence for PROG6222.
 >
 > Part 1 planned the system and designed the database. Part 2 built the REST
 > API. Part 3, this video, is the MVC web application that consumes that API.

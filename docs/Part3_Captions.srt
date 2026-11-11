@@ -1,69 +1,69 @@
 1
-00:00:00,000 --> 00:00:02,772
-Hello. My name is [your name], student number
+00:00:00,000 --> 00:00:02,796
+Hello. My name is Lusani Mudau, student number
 
 2
-00:00:02,772 --> 00:00:05,892
-[student number], and this is Part 3 of my
+00:00:02,796 --> 00:00:05,942
+ST10474461, and this is Part 3 of my RaceDay
 
 3
-00:00:05,892 --> 00:00:07,972
-RaceDay portfolio of evidence for [module].
+00:00:05,942 --> 00:00:07,690
+portfolio of evidence for PROG6222.
 
 4
-00:00:07,972 --> 00:00:10,744
+00:00:07,690 --> 00:00:10,487
 Part 1 planned the system and designed the
 
 5
-00:00:10,744 --> 00:00:13,171
+00:00:10,487 --> 00:00:12,934
 database. Part 2 built the REST API.
 
 6
-00:00:13,171 --> 00:00:16,290
+00:00:12,934 --> 00:00:16,080
 Part 3, this video, is the MVC web application
 
 7
-00:00:16,290 --> 00:00:17,677
+00:00:16,080 --> 00:00:17,478
 that consumes that API.
 
 8
-00:00:17,677 --> 00:00:20,103
+00:00:17,478 --> 00:00:19,925
 Sign-in and registration are the only public
 
 9
-00:00:20,103 --> 00:00:22,529
+00:00:19,925 --> 00:00:22,372
 pages. A new organiser account also needs
 
 10
-00:00:22,529 --> 00:00:23,916
+00:00:22,372 --> 00:00:23,770
 the access code, RACEDAY-ORG-2026.
 
 11
-00:00:23,916 --> 00:00:26,342
+00:00:23,770 --> 00:00:26,217
 From here, every request follows one path.
 
 12
-00:00:26,342 --> 00:00:28,768
+00:00:26,217 --> 00:00:28,664
 The browser talks to the MVC application,
 
 13
-00:00:28,768 --> 00:00:31,194
+00:00:28,664 --> 00:00:31,111
 the MVC application talks to the API,
 
 14
-00:00:31,194 --> 00:00:33,967
+00:00:31,111 --> 00:00:33,908
 and only the API talks to SQL Server.
 
 15
-00:00:33,967 --> 00:00:36,394
+00:00:33,908 --> 00:00:36,355
 The home page is the participant landing
 
 16
-00:00:36,394 --> 00:00:38,820
+00:00:36,355 --> 00:00:38,802
 page. The upcoming events and their banners
 
 17
-00:00:38,820 --> 00:00:40,900
+00:00:38,802 --> 00:00:40,900
 are all served by the API.
 
 18
