@@ -318,8 +318,16 @@ easier to cut.
 ## 10. CapCut assembly
 
 The draft **RaceDay Part 3** in `%LOCALAPPDATA%\CapCut\User Data\Projects\com.lveditor.draft`
-already contains this assembly — 36 clips, 204 captions, 12:11.640 — so the steps
-below are only the manual equivalent.
+already contains this assembly — 38 picture clips, the nine voice clips and 204
+captions, 11:03.120 — so the steps below are only the manual equivalent.
+
+The edit is cut to the recording, not the other way round. Each section on screen
+lasts exactly as long as the voice file for that section: the builder trims each
+clip to the space available, slows a clip to 0.80-0.94x where a section needs
+more room, and speeds the scrolling code shots up to 1.15x where it needs less.
+Two clips hold their last frame (3.2 seconds in the introduction, 0.7 seconds
+after the participant sign-in) so the pictures never run out. Nothing was cut out
+of the narration to make it fit.
 
 > **Strip the OBS audio before importing.** OBS records an Opus track into its MKV
 > files, and CapCut cannot demux Opus out of MP4: the project loads and then the
@@ -356,19 +364,20 @@ below are only the manual equivalent.
 
 ### Section timings of the edit
 
-These are the exact timings in the draft. Drop each voice file at its start time.
+These are the exact timings in the draft. The voice line starts 0.5 seconds into
+each section, so the first word never lands on a cut.
 
-| Section | Narration | Starts | Length |
-| --- | --- | --- | --- |
-| 1 | Introduction | 00:00.000 | 00:40.900 |
-| 2 | Solution structure | 00:40.900 | 01:03.770 |
-| 3 | Consuming the API | 01:44.670 | 01:45.730 |
-| 4 | Sign-in and role-based nav | 03:30.400 | 00:34.370 |
-| 5 | Participant journey | 04:04.770 | 01:40.400 |
-| 6 | Organiser journey | 05:45.170 | 02:01.570 |
-| 7 | Azure Blob Storage | 07:46.740 | 01:48.540 |
-| 8 | Docker and CI | 09:35.280 | 02:18.360 |
-| 9 | Close | 11:53.640 | 00:18.000 |
+| Section | Narration | Picture starts | Voice starts | Voice length |
+| --- | --- | --- | --- | --- |
+| 1 | Introduction | 00:00.000 | 00:00.500 | 00:56.040 |
+| 2 | Solution structure | 00:57.340 | 00:57.840 | 01:13.840 |
+| 3 | Consuming the API | 02:12.480 | 02:12.980 | 01:17.420 |
+| 4 | Sign-in and role-based nav | 03:31.200 | 03:31.700 | 00:48.090 |
+| 5 | Participant journey | 04:20.590 | 04:21.090 | 01:25.180 |
+| 6 | Organiser journey | 05:47.070 | 05:47.570 | 01:55.840 |
+| 7 | Azure Blob Storage | 07:44.210 | 07:44.710 | 01:20.160 |
+| 8 | Docker and CI | 09:05.670 | 09:06.170 | 01:32.540 |
+| 9 | Close | 10:39.510 | 10:40.010 | 00:21.110 |
 
 ---
 

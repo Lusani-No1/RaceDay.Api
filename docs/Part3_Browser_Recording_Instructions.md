@@ -107,9 +107,9 @@ narration: it is the official emulator, the same code path runs against a real
 account, only the connection string changes.
 
 **Voice-over.** Nine sections, one audio file each, script in
-`docs/Part3_Voiceover_Script.md` (12:11 of edit, with the start time and length
+`docs/Part3_Voiceover_Script.md` (11:03 of edit, with the start time and length
 of every section). Record section by section so a fluffed line costs seconds,
-not minutes.
+not minutes. The takes are now recorded and already placed in the draft.
 
 ---
 

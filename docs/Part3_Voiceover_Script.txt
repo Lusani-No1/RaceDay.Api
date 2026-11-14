@@ -1,15 +1,12 @@
 RACEDAY PART 3 - VOICE-OVER SCRIPT
-Read-aloud copy. Total length of the edit: 12:11.640 (9 sections).
+Recorded and edited. Total length of the edit: 11:03.120 (9 sections).
 
-Record one file per section, S1 to S9, and drop each file at the
-section start time so the captions stay in step with your voice.
-Do not read the section headings, the timings or the bracketed notes.
-If a line is too long for one breath, split it at a comma and keep
-the same words in the same order.
+The voice-over is already in the CapCut project, one clip per section,
+placed at the times below. This copy is kept for reference.
 
 
 ========================================================================
-S1 - INTRODUCTION                             starts 00:00.000  (00:40.900)
+S1 - INTRODUCTION                             voice at 00:00.500  (00:56.040)
 ========================================================================
 
 Hello. My name is Lusani Mudau, student number ST10474461, and this is Part 3 of my RaceDay portfolio of evidence for PROG6222.
@@ -20,7 +17,7 @@ The home page is the participant landing page. The upcoming events and their ban
 
 
 ========================================================================
-S2 - SOLUTION STRUCTURE                       starts 00:40.900  (01:03.770)
+S2 - SOLUTION STRUCTURE                       voice at 00:57.840  (01:13.840)
 ========================================================================
 
 Here is the solution in Visual Studio. It contains three projects.
@@ -32,7 +29,7 @@ The web application has no database connection string and no way to reach the da
 
 
 ========================================================================
-S3 - CONSUMING THE API                        starts 01:44.670  (01:45.730)
+S3 - CONSUMING THE API                        voice at 02:12.980  (01:17.420)
 ========================================================================
 
 All API calls live in one typed client, RaceDayApiClient. Each method maps to exactly one API endpoint.
@@ -44,7 +41,7 @@ If the API returns 401, the client throws an ApiUnauthorizedException. A global 
 
 
 ========================================================================
-S4 - SIGN IN AND ROLE-BASED NAVIGATION        starts 03:30.400  (00:34.370)
+S4 - SIGN IN AND ROLE-BASED NAVIGATION        voice at 03:31.700  (00:48.090)
 ========================================================================
 
 The MVC application has its own cookie authentication, separate from the API session.
@@ -57,7 +54,7 @@ Every organiser controller also carries an authorise attribute for the Organiser
 
 
 ========================================================================
-S5 - THE PARTICIPANT JOURNEY                  starts 04:04.770  (01:40.400)
+S5 - THE PARTICIPANT JOURNEY                  voice at 04:21.090  (01:25.180)
 ========================================================================
 
 The Events page lists every event and supports search and filtering by event type.
@@ -71,7 +68,7 @@ Finally, the profile page. The personal details come from the API, and the pictu
 
 
 ========================================================================
-S6 - THE ORGANISER JOURNEY                    starts 05:45.170  (02:01.570)
+S6 - THE ORGANISER JOURNEY                    voice at 05:47.570  (01:55.840)
 ========================================================================
 
 Signing in as the organiser opens the dashboard: five events, four upcoming, and four hundred and thirty-three enrolments. Every number comes from the API.
@@ -85,7 +82,7 @@ Every write action, for events, categories, enrolments and results, goes through
 
 
 ========================================================================
-S7 - AZURE BLOB STORAGE                       starts 07:46.740  (01:48.540)
+S7 - AZURE BLOB STORAGE                       voice at 07:44.710  (01:20.160)
 ========================================================================
 
 Image uploads go through the API as well. Storage sits behind an interface called IFileStorage, with two implementations, and FileStorageRegistration chooses between them once at startup.
@@ -96,7 +93,7 @@ Uploading a banner now writes a real blob, and the API serves that URL straight 
 
 
 ========================================================================
-S8 - DOCKER AND CONTINUOUS INTEGRATION        starts 09:35.280  (02:18.360)
+S8 - DOCKER AND CONTINUOUS INTEGRATION        voice at 09:06.170  (01:32.540)
 ========================================================================
 
 The whole system runs in Docker. The API and the MVC app each have a multi-stage Dockerfile: restore and publish in the SDK image, then copy only the published output into the small runtime image.
@@ -109,7 +106,7 @@ The latest run is green.
 
 
 ========================================================================
-S9 - CLOSE                                    starts 11:53.640  (00:18.000)
+S9 - CLOSE                                    voice at 10:40.010  (00:21.110)
 ========================================================================
 
 That is Part 3: an MVC application that consumes the Part 2 API, with session-based authentication, role-based navigation, complete participant and organiser journeys, Azure Blob Storage behind the API, and a Docker and CI pipeline.

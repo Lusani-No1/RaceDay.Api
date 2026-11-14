@@ -1,33 +1,30 @@
 # Part 3 — voice-over script
 
 Generated from the same data as the edited video, so the timings below match
-the CapCut timeline *RaceDay Part 3* exactly.
+the CapCut timeline *RaceDay Part 3* exactly. The edit is cut to the recording:
+each section on screen lasts exactly as long as the section you recorded.
 
-- Read one line, then breathe. A full stop ends a sentence; keep going.
 - The presenter details are filled in: Lusani Mudau, ST10474461, PROG6222.
+- The voice-over is already in the project, one clip per section.
 - Do not read the section headings or the notes in italics.
-- Record one file per section, `S1` to `S9`, and drop each file at the
-  section start time. That keeps the captions in step with your voice.
-- If a line is too long for one breath, split it at a comma and keep the
-  same words in the same order.
 
-Total length of the edit: **12:11.640** (9 sections).
+Total length of the edit: **11:03.120** (9 sections).
 
-| Section | Starts | Length | Words | Pace |
+| Section | Starts | Voice | Words | Pace |
 | --- | --- | --- | --- | --- |
-| S1 — Introduction | 00:00.000 | 00:40.900 | 117 | 172 wpm |
-| S2 — Solution structure | 00:40.900 | 01:03.770 | 141 | 133 wpm |
-| S3 — Consuming the API | 01:44.670 | 01:45.730 | 159 | 90 wpm |
-| S4 — Sign in and role-based navigation | 03:30.400 | 00:34.370 | 99 | 173 wpm |
-| S5 — The participant journey | 04:04.770 | 01:40.400 | 180 | 108 wpm |
-| S6 — The organiser journey | 05:45.170 | 02:01.570 | 231 | 114 wpm |
-| S7 — Azure Blob Storage | 07:46.740 | 01:48.540 | 165 | 91 wpm |
-| S8 — Docker and continuous integration | 09:35.280 | 02:18.360 | 190 | 82 wpm |
-| S9 — Close | 11:53.640 | 00:18.000 | 39 | 130 wpm |
+| S1 — Introduction | 00:00.500 | 00:56.040 | 117 | 125 wpm |
+| S2 — Solution structure | 00:57.840 | 01:13.840 | 141 | 115 wpm |
+| S3 — Consuming the API | 02:12.980 | 01:17.420 | 159 | 123 wpm |
+| S4 — Sign in and role-based navigation | 03:31.700 | 00:48.090 | 99 | 124 wpm |
+| S5 — The participant journey | 04:21.090 | 01:25.180 | 180 | 127 wpm |
+| S6 — The organiser journey | 05:47.570 | 01:55.840 | 231 | 120 wpm |
+| S7 — Azure Blob Storage | 07:44.710 | 01:20.160 | 165 | 124 wpm |
+| S8 — Docker and continuous integration | 09:06.170 | 01:32.540 | 190 | 123 wpm |
+| S9 — Close | 10:40.010 | 00:21.110 | 39 | 111 wpm |
 
 ---
 
-## S1 — Introduction   `00:00.000 · 00:40.900 · 117 words · 172 wpm`
+## S1 — Introduction   `00:00.500 · 00:56.040 · 117 words · 125 wpm`
 
 *Title card, then the public sign-in and registration pages, then the participant home page.*
 
@@ -37,7 +34,7 @@ Sign-in and registration are the only public pages. A new organiser account also
 From here, every request follows one path. The browser talks to the MVC application, the MVC application talks to the API, and only the API talks to SQL Server.  
 The home page is the participant landing page. The upcoming events and their banners are all served by the API.  
 
-## S2 — Solution structure   `00:40.900 · 01:03.770 · 141 words · 133 wpm`
+## S2 — Solution structure   `00:57.840 · 01:13.840 · 141 words · 115 wpm`
 
 *Solution Explorer: the three projects, then the MVC project file and a search for DbContext.*
 
@@ -48,7 +45,7 @@ The important detail is what the MVC project does not contain. Open the project 
 If I search the whole MVC project for DbContext, there are zero results.  
 The web application has no database connection string and no way to reach the database directly. That is deliberate. Every read and every write goes through the API.  
 
-## S3 — Consuming the API   `01:44.670 · 01:45.730 · 159 words · 90 wpm`
+## S3 — Consuming the API   `02:12.980 · 01:17.420 · 159 words · 123 wpm`
 
 *RaceDayApiClient: the methods, the captured API session cookie, and the 401 filter.*
 
@@ -59,7 +56,7 @@ These lines capture the Set-Cookie header after every response. These lines atta
 The HTTP handler is created with cookie use switched off, so it keeps no shared cookie jar. That guarantees one user API session can never leak into another user request.  
 If the API returns 401, the client throws an ApiUnauthorizedException. A global exception filter catches it, signs the MVC user out, clears the stored API cookie, and redirects to the login page.  
 
-## S4 — Sign in and role-based navigation   `03:30.400 · 00:34.370 · 99 words · 173 wpm`
+## S4 — Sign in and role-based navigation   `03:31.700 · 00:48.090 · 99 words · 124 wpm`
 
 *Participant sign-in, then organiser sign-in, showing the navigation change.*
 
@@ -71,7 +68,7 @@ Now I will sign out and sign in as the organiser.
 The menu changes to Dashboard, My events and Browse events.  
 Every organiser controller also carries an authorise attribute for the Organiser role, so the server enforces this as well.  
 
-## S5 — The participant journey   `04:04.770 · 01:40.400 · 180 words · 108 wpm`
+## S5 — The participant journey   `04:21.090 · 01:25.180 · 180 words · 127 wpm`
 
 *Events, filtering, event detail, enrolling, the enrolments list, results and the profile picture upload.*
 
@@ -84,7 +81,7 @@ My results is the page that proves the results feature. This participant finishe
 The page reads forty-seventh of three hundred and twelve finishers, with the ordinal suffix generated in code, so it says 47th and not 47.  
 Finally, the profile page. The personal details come from the API, and the picture is uploaded as a file to the API upload endpoint. The URL that comes back is displayed here.  
 
-## S6 — The organiser journey   `05:45.170 · 02:01.570 · 231 words · 114 wpm`
+## S6 — The organiser journey   `05:47.570 · 01:55.840 · 231 words · 120 wpm`
 
 *Dashboard, validation, creating an event, categories, enrolments, results and capturing a result.*
 
@@ -97,7 +94,7 @@ Under Results, the Pretoria Marathon already has three hundred and twelve captur
 For an event with no results yet, the page lists the confirmed participants who are still waiting. I capture one, with a finish time and a position. It is saved through the API and appears in the table immediately.  
 Every write action, for events, categories, enrolments and results, goes through the API. The MVC application never writes to the database.  
 
-## S7 — Azure Blob Storage   `07:46.740 · 01:48.540 · 165 words · 91 wpm`
+## S7 — Azure Blob Storage   `07:44.710 · 01:20.160 · 165 words · 124 wpm`
 
 *The IFileStorage abstraction, the Azure implementation, the configuration, then a banner uploaded through Azurite.*
 
@@ -107,7 +104,7 @@ AzureBlobFileStorage uses a blob container client. It creates the container if i
 To demonstrate this honestly, without an Azure subscription, I am running the Azurite storage emulator, which implements the same Blob API. The provider is set to Azure and the connection string points at Azurite.  
 Uploading a banner now writes a real blob, and the API serves that URL straight back to the MVC application. None of this storage code is in the MVC project. The web application only ever receives a URL.  
 
-## S8 — Docker and continuous integration   `09:35.280 · 02:18.360 · 190 words · 82 wpm`
+## S8 — Docker and continuous integration   `09:06.170 · 01:32.540 · 190 words · 123 wpm`
 
 *Compose file, Dockerfiles, CI workflow, the running containers, Swagger and the green GitHub Actions run.*
 
@@ -119,7 +116,7 @@ Here are the three containers running, the MVC app answering on 8081, and Swagge
 The pipeline is in GitHub Actions. On every push it restores and builds the whole solution in Release, runs the eighty-five tests, publishes the MVC project, and uploads the publish output as an artifact.  
 The latest run is green.  
 
-## S9 — Close   `11:53.640 · 00:18.000 · 39 words · 130 wpm`
+## S9 — Close   `10:40.010 · 00:21.110 · 39 words · 111 wpm`
 
 *End card.*
 

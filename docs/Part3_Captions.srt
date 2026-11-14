@@ -1,815 +1,815 @@
 1
-00:00:00,000 --> 00:00:02,796
+00:00:00,500 --> 00:00:04,331
 Hello. My name is Lusani Mudau, student number
 
 2
-00:00:02,796 --> 00:00:05,942
+00:00:04,331 --> 00:00:08,642
 ST10474461, and this is Part 3 of my RaceDay
 
 3
-00:00:05,942 --> 00:00:07,690
+00:00:08,642 --> 00:00:11,037
 portfolio of evidence for PROG6222.
 
 4
-00:00:07,690 --> 00:00:10,487
+00:00:11,037 --> 00:00:14,869
 Part 1 planned the system and designed the
 
 5
-00:00:10,487 --> 00:00:12,934
+00:00:14,869 --> 00:00:18,222
 database. Part 2 built the REST API.
 
 6
-00:00:12,934 --> 00:00:16,080
+00:00:18,222 --> 00:00:22,532
 Part 3, this video, is the MVC web application
 
 7
-00:00:16,080 --> 00:00:17,478
+00:00:22,532 --> 00:00:24,448
 that consumes that API.
 
 8
-00:00:17,478 --> 00:00:19,925
+00:00:24,448 --> 00:00:27,801
 Sign-in and registration are the only public
 
 9
-00:00:19,925 --> 00:00:22,372
+00:00:27,801 --> 00:00:31,154
 pages. A new organiser account also needs
 
 10
-00:00:22,372 --> 00:00:23,770
+00:00:31,154 --> 00:00:33,070
 the access code, RACEDAY-ORG-2026.
 
 11
-00:00:23,770 --> 00:00:26,217
+00:00:33,070 --> 00:00:36,805
 From here, every request follows one path.
 
 12
-00:00:26,217 --> 00:00:28,664
+00:00:36,805 --> 00:00:39,698
 The browser talks to the MVC application,
 
 13
-00:00:28,664 --> 00:00:31,111
+00:00:39,698 --> 00:00:43,048
 the MVC application talks to the API,
 
 14
-00:00:31,111 --> 00:00:33,908
+00:00:43,048 --> 00:00:46,960
 and only the API talks to SQL Server.
 
 15
-00:00:33,908 --> 00:00:36,355
+00:00:46,960 --> 00:00:50,313
 The home page is the participant landing
 
 16
-00:00:36,355 --> 00:00:38,802
+00:00:50,313 --> 00:00:53,666
 page. The upcoming events and their banners
 
 17
-00:00:38,802 --> 00:00:40,900
+00:00:53,666 --> 00:00:56,540
 are all served by the API.
 
 18
-00:00:40,900 --> 00:00:44,065
+00:00:57,840 --> 00:01:01,505
 Here is the solution in Visual Studio.
 
 19
-00:00:44,065 --> 00:00:45,874
+00:01:01,505 --> 00:01:03,600
 It contains three projects.
 
 20
-00:00:45,874 --> 00:00:49,493
+00:01:03,600 --> 00:01:07,790
 RaceDay.Api is the REST API from Part 2.
 
 21
-00:00:49,493 --> 00:00:52,659
+00:01:07,790 --> 00:01:11,706
 RaceDay.Mvc is the web application in this
 
 22
-00:00:52,659 --> 00:00:54,920
+00:01:11,706 --> 00:01:14,074
 video. RaceDay.Api.test holds the automated
 
 23
-00:00:54,920 --> 00:00:58,538
+00:01:14,074 --> 00:01:18,263
 tests, eighty-five of them, and all of them
 
 24
-00:00:58,538 --> 00:00:58,990
+00:01:18,263 --> 00:01:19,537
 pass.
 
 25
-00:00:58,990 --> 00:01:02,156
+00:01:19,537 --> 00:01:22,453
 The MVC project follows the normal ASP.NET
 
 26
-00:01:02,156 --> 00:01:04,418
+00:01:22,453 --> 00:01:24,587
 Core layout. Controllers handle requests.
 
 27
-00:01:04,418 --> 00:01:07,131
+00:01:24,587 --> 00:01:28,213
 Views and ViewModels build the interface.
 
 28
-00:01:07,131 --> 00:01:09,845
+00:01:28,213 --> 00:01:31,356
 Services contain the API client. wwwroot
 
 29
-00:01:09,845 --> 00:01:11,654
+00:01:31,356 --> 00:01:33,450
 holds the static assets.
 
 30
-00:01:11,654 --> 00:01:15,272
+00:01:33,450 --> 00:01:37,640
 The important detail is what the MVC project
 
 31
-00:01:15,272 --> 00:01:18,890
+00:01:37,640 --> 00:01:41,219
 does not contain. Open the project file and
 
 32
-00:01:18,890 --> 00:01:22,056
+00:01:41,219 --> 00:01:45,499
 there are no NuGet packages at all.
 
 33
-00:01:22,056 --> 00:01:24,770
+00:01:45,499 --> 00:01:48,637
 No Entity Framework, no SQL client,
 
 34
-00:01:24,770 --> 00:01:26,126
+00:01:48,637 --> 00:01:50,762
 no Azure SDK.
 
 35
-00:01:26,126 --> 00:01:30,197
+00:01:50,762 --> 00:01:54,921
 If I search the whole MVC project for DbContext,
 
 36
-00:01:30,197 --> 00:01:32,006
+00:01:54,921 --> 00:01:57,016
 there are zero results.
 
 37
-00:01:32,006 --> 00:01:35,172
+00:01:57,016 --> 00:02:00,682
 The web application has no database connection
 
 38
-00:01:35,172 --> 00:01:39,242
+00:02:00,682 --> 00:02:05,525
 string and no way to reach the database directly.
 
 39
-00:01:39,242 --> 00:01:42,408
+00:02:05,525 --> 00:02:09,061
 That is deliberate. Every read and every
 
 40
-00:01:42,408 --> 00:01:44,670
+00:02:09,061 --> 00:02:11,680
 write goes through the API.
 
 41
-00:01:44,670 --> 00:01:49,989
+00:02:12,980 --> 00:02:16,455
 All API calls live in one typed client,
 
 42
-00:01:49,989 --> 00:01:53,979
+00:02:16,455 --> 00:02:19,796
 RaceDayApiClient. Each method maps to exactly
 
 43
-00:01:53,979 --> 00:01:55,974
+00:02:19,796 --> 00:02:21,257
 one API endpoint.
 
 44
-00:01:55,974 --> 00:02:01,294
+00:02:21,257 --> 00:02:25,152
 There is no business logic here. The client
 
 45
-00:02:01,294 --> 00:02:05,948
+00:02:25,152 --> 00:02:27,921
 sends a request, receives JSON, and hands
 
 46
-00:02:05,948 --> 00:02:09,273
+00:02:27,921 --> 00:02:31,176
 it back to the controller.
 
 47
-00:02:09,273 --> 00:02:14,593
+00:02:31,176 --> 00:02:35,390
 The interesting part is how the API session
 
 48
-00:02:14,593 --> 00:02:19,913
+00:02:35,390 --> 00:02:38,415
 is carried. The API issues its own session
 
 49
-00:02:19,913 --> 00:02:23,238
+00:02:38,415 --> 00:02:41,221
 cookie, called RaceDay.Session. The browser
 
 50
-00:02:23,238 --> 00:02:28,557
+00:02:41,221 --> 00:02:45,116
 never sees that cookie. It is kept server-side
 
 51
-00:02:28,557 --> 00:02:33,877
+00:02:45,116 --> 00:02:46,133
 in the MVC session, separately for each signed-in
 
 52
-00:02:33,877 --> 00:02:34,542
+00:02:46,133 --> 00:02:48,813
 user.
 
 53
-00:02:34,542 --> 00:02:38,532
+00:02:48,813 --> 00:02:52,420
 These lines capture the Set-Cookie header
 
 54
-00:02:38,532 --> 00:02:42,522
+00:02:52,420 --> 00:02:55,341
 after every response. These lines attach
 
 55
-00:02:42,522 --> 00:02:48,506
+00:02:55,341 --> 00:02:59,106
 it to the next request and handle an unauthorised
 
 56
-00:02:48,506 --> 00:02:49,171
+00:02:59,106 --> 00:03:00,211
 response.
 
 57
-00:02:49,171 --> 00:02:54,491
+00:03:00,211 --> 00:03:03,990
 The HTTP handler is created with cookie use
 
 58
-00:02:54,491 --> 00:02:59,811
+00:03:03,990 --> 00:03:08,001
 switched off, so it keeps no shared cookie
 
 59
-00:02:59,811 --> 00:03:04,466
+00:03:08,001 --> 00:03:11,410
 jar. That guarantees one user API session
 
 60
-00:03:04,466 --> 00:03:09,121
+00:03:11,410 --> 00:03:14,818
 can never leak into another user request.
 
 61
-00:03:09,121 --> 00:03:14,440
+00:03:14,818 --> 00:03:19,265
 If the API returns 401, the client throws
 
 62
-00:03:14,440 --> 00:03:17,765
+00:03:19,265 --> 00:03:21,649
 an ApiUnauthorizedException. A global exception
 
 63
-00:03:17,765 --> 00:03:23,085
+00:03:21,649 --> 00:03:25,554
 filter catches it, signs the MVC user out,
 
 64
-00:03:23,085 --> 00:03:27,740
+00:03:25,554 --> 00:03:27,888
 clears the stored API cookie, and redirects
 
 65
-00:03:27,740 --> 00:03:30,400
+00:03:27,888 --> 00:03:30,400
 to the login page.
 
 66
-00:03:30,400 --> 00:03:33,177
+00:03:31,700 --> 00:03:35,192
 The MVC application has its own cookie authentication,
 
 67
-00:03:33,177 --> 00:03:34,913
+00:03:35,192 --> 00:03:37,657
 separate from the API session.
 
 68
-00:03:34,913 --> 00:03:37,690
+00:03:37,657 --> 00:03:41,573
 Signing in posts the credentials to the API,
 
 69
-00:03:37,690 --> 00:03:40,467
+00:03:41,573 --> 00:03:45,786
 and the app keeps a local cookie containing
 
 70
-00:03:40,467 --> 00:03:42,203
+00:03:45,786 --> 00:03:48,215
 the user name and role.
 
 71
-00:03:42,203 --> 00:03:44,634
+00:03:48,215 --> 00:03:51,616
 I will sign in as a participant.
 
 72
-00:03:44,634 --> 00:03:47,064
+00:03:51,616 --> 00:03:55,442
 The navigation is rendered from that role:
 
 73
-00:03:47,064 --> 00:03:49,147
+00:03:55,442 --> 00:03:58,144
 Home, Events, My enrolments, My results.
 
 74
-00:03:49,147 --> 00:03:50,883
+00:03:58,144 --> 00:04:00,282
 There is no organiser menu.
 
 75
-00:03:50,883 --> 00:03:54,007
+00:04:00,282 --> 00:04:04,731
 Now I will sign out and sign in as
 
 76
-00:03:54,007 --> 00:03:54,702
+00:04:04,731 --> 00:04:05,703
 the organiser.
 
 77
-00:03:54,702 --> 00:03:57,132
+00:04:05,703 --> 00:04:09,702
 The menu changes to Dashboard, My events
 
 78
-00:03:57,132 --> 00:03:58,173
+00:04:09,702 --> 00:04:10,560
 and Browse events.
 
 79
-00:03:58,173 --> 00:04:00,256
+00:04:10,560 --> 00:04:13,142
 Every organiser controller also carries an
 
 80
-00:04:00,256 --> 00:04:02,339
+00:04:13,142 --> 00:04:16,628
 authorise attribute for the Organiser role,
 
 81
-00:04:02,339 --> 00:04:04,770
+00:04:16,628 --> 00:04:19,790
 so the server enforces this as well.
 
 82
-00:04:04,770 --> 00:04:09,232
+00:04:21,090 --> 00:04:24,875
 The Events page lists every event and supports
 
 83
-00:04:09,232 --> 00:04:12,578
+00:04:24,875 --> 00:04:28,082
 search and filtering by event type.
 
 84
-00:04:12,578 --> 00:04:15,925
+00:04:28,082 --> 00:04:30,721
 Opening an event shows the banner,
 
 85
-00:04:15,925 --> 00:04:19,272
+00:04:30,721 --> 00:04:33,886
 the date, the location, the distance,
 
 86
-00:04:19,272 --> 00:04:22,618
+00:04:33,886 --> 00:04:36,824
 and every category with its price.
 
 87
-00:04:22,618 --> 00:04:26,523
+00:04:36,824 --> 00:04:39,545
 I will enter the Johannesburg Sunrise Walk,
 
 88
-00:04:26,523 --> 00:04:29,870
+00:04:39,545 --> 00:04:42,385
 in the five kilometre walk category.
 
 89
-00:04:29,870 --> 00:04:33,774
+00:04:42,385 --> 00:04:45,697
 That entry now appears on My enrolments,
 
 90
-00:04:33,774 --> 00:04:36,563
+00:04:45,697 --> 00:04:48,544
 with colour-coded statuses. Confirmed is
 
 91
-00:04:36,563 --> 00:04:40,467
+00:04:48,544 --> 00:04:50,241
 green, Pending is amber, and Cancelled is
 
 92
-00:04:40,467 --> 00:04:41,025
+00:04:50,241 --> 00:04:51,713
 red.
 
 93
-00:04:41,025 --> 00:04:44,372
+00:04:51,713 --> 00:04:54,688
 This participant already has all three,
 
 94
-00:04:44,372 --> 00:04:48,276
+00:04:54,688 --> 00:04:58,001
 so the states are visible at once.
 
 95
-00:04:48,276 --> 00:04:53,296
+00:04:58,001 --> 00:05:02,260
 The badge class is chosen in code from the
 
 96
-00:04:53,296 --> 00:04:57,758
+00:05:02,260 --> 00:05:06,046
 status value, and the same component is reused
 
 97
-00:04:57,758 --> 00:04:59,990
+00:05:06,046 --> 00:05:07,831
 on the organiser screen.
 
 98
-00:04:59,990 --> 00:05:05,010
+00:05:07,831 --> 00:05:11,589
 My results is the page that proves the results
 
 99
-00:05:05,010 --> 00:05:08,356
+00:05:11,589 --> 00:05:15,037
 feature. This participant finished the Pretoria
 
 100
-00:05:08,356 --> 00:05:11,703
+00:05:15,037 --> 00:05:18,327
 Capital Marathon in two hours, thirty-six
 
 101
-00:05:11,703 --> 00:05:13,934
+00:05:18,327 --> 00:05:19,879
 minutes and fifty seconds.
 
 102
-00:05:13,934 --> 00:05:17,838
+00:05:19,879 --> 00:05:22,383
 The page reads forty-seventh of three hundred
 
 103
-00:05:17,838 --> 00:05:21,743
+00:05:22,383 --> 00:05:26,394
 and twelve finishers, with the ordinal suffix
 
 104
-00:05:21,743 --> 00:05:26,763
+00:05:26,394 --> 00:05:29,908
 generated in code, so it says 47th and not
 
 105
-00:05:26,763 --> 00:05:27,321
+00:05:29,908 --> 00:05:31,126
 47.
 
 106
-00:05:27,321 --> 00:05:31,225
+00:05:31,126 --> 00:05:34,358
 Finally, the profile page. The personal details
 
 107
-00:05:31,225 --> 00:05:36,245
+00:05:34,358 --> 00:05:38,698
 come from the API, and the picture is uploaded
 
 108
-00:05:36,245 --> 00:05:40,707
+00:05:38,698 --> 00:05:42,385
 as a file to the API upload endpoint.
 
 109
-00:05:40,707 --> 00:05:45,170
+00:05:42,385 --> 00:05:46,270
 The URL that comes back is displayed here.
 
 110
-00:05:45,170 --> 00:05:49,380
+00:05:47,570 --> 00:05:51,095
 Signing in as the organiser opens the dashboard:
 
 111
-00:05:49,380 --> 00:05:53,064
+00:05:51,095 --> 00:05:55,724
 five events, four upcoming, and four hundred
 
 112
-00:05:53,064 --> 00:05:55,695
+00:05:55,724 --> 00:05:57,997
 and thirty-three enrolments. Every number
 
 113
-00:05:55,695 --> 00:05:57,800
+00:05:57,997 --> 00:05:59,605
 comes from the API.
 
 114
-00:05:57,800 --> 00:06:02,537
+00:05:59,605 --> 00:06:04,118
 I will create a new event. First I submit
 
 115
-00:06:02,537 --> 00:06:06,747
+00:06:04,118 --> 00:06:07,684
 the form empty. Instead of an error page,
 
 116
-00:06:06,747 --> 00:06:10,431
+00:06:07,684 --> 00:06:11,546
 the form returns with inline validation messages,
 
 117
-00:06:10,431 --> 00:06:14,641
+00:06:11,546 --> 00:06:14,974
 and it keeps the values I already typed.
 
 118
-00:06:14,641 --> 00:06:17,799
+00:06:14,974 --> 00:06:18,774
 That is the graceful validation requirement.
 
 119
-00:06:17,799 --> 00:06:22,535
+00:06:18,774 --> 00:06:22,851
 Now I fill it in and attach a banner
 
 120
-00:06:22,535 --> 00:06:26,745
+00:06:22,851 --> 00:06:27,109
 image. The event is created through the API,
 
 121
-00:06:26,745 --> 00:06:30,956
+00:06:27,109 --> 00:06:31,882
 and the banner goes through the API dedicated
 
 122
-00:06:30,956 --> 00:06:34,640
+00:06:31,882 --> 00:06:34,708
 banner endpoint. The returned URL is displayed
 
 123
-00:06:34,640 --> 00:06:36,745
+00:06:34,708 --> 00:06:37,079
 on the card immediately.
 
 124
-00:06:36,745 --> 00:06:40,955
+00:06:37,079 --> 00:06:40,726
 From My events I can manage everything for
 
 125
-00:06:40,955 --> 00:06:45,165
+00:06:40,726 --> 00:06:44,737
 that event. Under Categories, I add a category
 
 126
-00:06:45,165 --> 00:06:49,375
+00:06:44,737 --> 00:06:48,519
 with its distance and price, and the table
 
 127
-00:06:49,375 --> 00:06:49,902
+00:06:48,519 --> 00:06:49,251
 updates.
 
 128
-00:06:49,902 --> 00:06:53,059
+00:06:49,251 --> 00:06:52,259
 Under Enrolments, every participant is listed
 
 129
-00:06:53,059 --> 00:06:56,743
+00:06:52,259 --> 00:06:56,440
 with their status. This view is read-only
 
 130
-00:06:56,743 --> 00:06:59,901
+00:06:56,440 --> 00:06:58,829
 for the organiser, because entries change
 
 131
-00:06:59,901 --> 00:07:03,058
+00:06:58,829 --> 00:07:02,250
 when a participant enrols or cancels.
 
 132
-00:07:03,058 --> 00:07:06,216
+00:07:02,250 --> 00:07:04,697
 Under Results, the Pretoria Marathon already
 
 133
-00:07:06,216 --> 00:07:09,900
+00:07:04,697 --> 00:07:08,306
 has three hundred and twelve captured results,
 
 134
-00:07:09,900 --> 00:07:14,637
+00:07:08,306 --> 00:07:12,820
 each shown as a position out of the total
 
 135
-00:07:14,637 --> 00:07:15,163
+00:07:12,820 --> 00:07:16,077
 finishers.
 
 136
-00:07:15,163 --> 00:07:19,899
+00:07:16,077 --> 00:07:17,834
 For an event with no results yet, the page
 
 137
-00:07:19,899 --> 00:07:23,057
+00:07:17,834 --> 00:07:20,843
 lists the confirmed participants who are
 
 138
-00:07:23,057 --> 00:07:27,267
+00:07:20,843 --> 00:07:24,855
 still waiting. I capture one, with a finish
 
 139
-00:07:27,267 --> 00:07:31,477
+00:07:24,855 --> 00:07:29,037
 time and a position. It is saved through
 
 140
-00:07:31,477 --> 00:07:35,688
+00:07:29,037 --> 00:07:32,783
 the API and appears in the table immediately.
 
 141
-00:07:35,688 --> 00:07:38,845
+00:07:32,783 --> 00:07:35,887
 Every write action, for events, categories,
 
 142
-00:07:38,845 --> 00:07:42,003
+00:07:35,887 --> 00:07:39,525
 enrolments and results, goes through the
 
 143
-00:07:42,003 --> 00:07:45,687
+00:07:39,525 --> 00:07:42,407
 API. The MVC application never writes to
 
 144
-00:07:45,687 --> 00:07:46,740
+00:07:42,407 --> 00:07:43,410
 the database.
 
 145
-00:07:46,740 --> 00:07:52,002
+00:07:44,710 --> 00:07:48,596
 Image uploads go through the API as well.
 
 146
-00:07:52,002 --> 00:07:56,607
+00:07:48,596 --> 00:07:51,962
 Storage sits behind an interface called IFileStorage,
 
 147
-00:07:56,607 --> 00:07:59,896
+00:07:51,962 --> 00:07:53,956
 with two implementations, and FileStorageRegistration
 
 148
-00:07:59,896 --> 00:08:03,843
+00:07:53,956 --> 00:07:57,341
 chooses between them once at startup.
 
 149
-00:08:03,843 --> 00:08:08,447
+00:07:57,341 --> 00:08:00,742
 When the provider is set to Azure,
 
 150
-00:08:08,447 --> 00:08:10,421
+00:08:00,742 --> 00:08:02,663
 it registers AzureBlobFileStorage.
 
 151
-00:08:10,421 --> 00:08:14,368
+00:08:02,663 --> 00:08:05,114
 Otherwise it registers the local provider
 
 152
-00:08:14,368 --> 00:08:19,630
+00:08:05,114 --> 00:08:09,000
 that writes into wwwroot. The rest of the
 
 153
-00:08:19,630 --> 00:08:23,577
+00:08:09,000 --> 00:08:12,059
 application only depends on the interface.
 
 154
-00:08:23,577 --> 00:08:26,866
+00:08:12,059 --> 00:08:14,344
 AzureBlobFileStorage uses a blob container
 
 155
-00:08:26,866 --> 00:08:32,129
+00:08:14,344 --> 00:08:18,231
 client. It creates the container if it does
 
 156
-00:08:32,129 --> 00:08:37,391
+00:08:18,231 --> 00:08:22,118
 not exist, uploads the stream with a content
 
 157
-00:08:37,391 --> 00:08:42,654
+00:08:22,118 --> 00:08:26,004
 type and a generated name, and returns the
 
 158
-00:08:42,654 --> 00:08:47,259
+00:08:26,004 --> 00:08:29,198
 public URL. Deleting an image removes the
 
 159
-00:08:47,259 --> 00:08:47,917
+00:08:29,198 --> 00:08:31,648
 blob.
 
 160
-00:08:47,917 --> 00:08:51,863
+00:08:31,648 --> 00:08:32,806
 To demonstrate this honestly, without an
 
 161
-00:08:51,863 --> 00:08:56,468
+00:08:32,806 --> 00:08:36,206
 Azure subscription, I am running the Azurite
 
 162
-00:08:56,468 --> 00:09:00,415
+00:08:36,206 --> 00:08:38,494
 storage emulator, which implements the same
 
 163
-00:09:00,415 --> 00:09:06,335
+00:08:38,494 --> 00:08:43,512
 Blob API. The provider is set to Azure and
 
 164
-00:09:06,335 --> 00:09:10,282
+00:08:43,512 --> 00:08:46,408
 the connection string points at Azurite.
 
 165
-00:09:10,282 --> 00:09:15,545
+00:08:46,408 --> 00:08:49,951
 Uploading a banner now writes a real blob,
 
 166
-00:09:15,545 --> 00:09:20,807
+00:08:49,951 --> 00:08:54,182
 and the API serves that URL straight back
 
 167
-00:09:20,807 --> 00:09:26,070
+00:08:54,182 --> 00:08:57,920
 to the MVC application. None of this storage
 
 168
-00:09:26,070 --> 00:09:31,990
+00:08:57,920 --> 00:09:02,440
 code is in the MVC project. The web application
 
 169
-00:09:31,990 --> 00:09:35,280
+00:09:02,440 --> 00:09:04,870
 only ever receives a URL.
 
 170
-00:09:35,280 --> 00:09:41,105
+00:09:06,170 --> 00:09:10,066
 The whole system runs in Docker. The API
 
 171
-00:09:41,105 --> 00:09:47,659
+00:09:10,066 --> 00:09:14,449
 and the MVC app each have a multi-stage Dockerfile:
 
 172
-00:09:47,659 --> 00:09:52,757
+00:09:14,449 --> 00:09:17,859
 restore and publish in the SDK image,
 
 173
-00:09:52,757 --> 00:09:57,854
+00:09:17,859 --> 00:09:20,902
 then copy only the published output into
 
 174
-00:09:57,854 --> 00:10:00,767
+00:09:20,902 --> 00:09:23,216
 the small runtime image.
 
 175
-00:10:00,767 --> 00:10:04,408
+00:09:23,216 --> 00:09:25,652
 Docker Compose defines three services:
 
 176
-00:10:04,408 --> 00:10:10,234
+00:09:25,652 --> 00:09:29,835
 SQL Server on 1433, the API on 8080,
 
 177
-00:10:10,234 --> 00:10:14,603
+00:09:29,835 --> 00:09:31,983
 and the MVC application on 8081.
 
 178
-00:10:14,603 --> 00:10:18,972
+00:09:31,983 --> 00:09:35,393
 The connection string, the organiser access
 
 179
-00:10:18,972 --> 00:10:24,798
+00:09:35,393 --> 00:09:39,592
 code and the storage provider all come from
 
 180
-00:10:24,798 --> 00:10:29,167
+00:09:39,592 --> 00:09:42,334
 environment variables in the Compose file,
 
 181
-00:10:29,167 --> 00:10:35,721
+00:09:42,334 --> 00:09:46,408
 so the same images can run against a different
 
 182
-00:10:35,721 --> 00:10:40,090
+00:09:46,408 --> 00:09:49,959
 database, or a real Azure account,
 
 183
-00:10:40,090 --> 00:10:42,275
+00:09:49,959 --> 00:09:50,978
 without a rebuild.
 
 184
-00:10:42,275 --> 00:10:46,644
+00:09:50,978 --> 00:09:53,901
 One command starts everything: docker compose
 
 185
-00:10:46,644 --> 00:10:52,470
+00:09:53,901 --> 00:09:57,797
 up, with the build flag. The API applies
 
 186
-00:10:52,470 --> 00:10:58,296
+00:09:57,797 --> 00:10:01,694
 its migrations at startup, and the MVC app
 
 187
-00:10:58,296 --> 00:11:03,393
+00:10:01,694 --> 00:10:05,103
 reaches the API through the service name
 
 188
-00:11:03,393 --> 00:11:09,947
+00:10:05,103 --> 00:10:09,486
 on the Compose network, so there are no hard-coded
 
 189
-00:11:09,947 --> 00:11:11,403
+00:10:09,486 --> 00:10:10,460
 host addresses.
 
 190
-00:11:11,403 --> 00:11:15,773
+00:10:10,460 --> 00:10:13,383
 Here are the three containers running,
 
 191
-00:11:15,773 --> 00:11:21,598
+00:10:13,383 --> 00:10:17,279
 the MVC app answering on 8081, and Swagger
 
 192
-00:11:21,598 --> 00:11:25,239
+00:10:17,279 --> 00:10:19,123
 documenting the API on 8080.
 
 193
-00:11:25,239 --> 00:11:29,609
+00:10:19,123 --> 00:10:22,637
 The pipeline is in GitHub Actions.
 
 194
-00:11:29,609 --> 00:11:35,434
+00:10:22,637 --> 00:10:27,169
 On every push it restores and builds the
 
 195
-00:11:35,434 --> 00:11:40,532
+00:10:27,169 --> 00:10:29,962
 whole solution in Release, runs the eighty-five
 
 196
-00:11:40,532 --> 00:11:45,629
+00:10:29,962 --> 00:10:33,352
 tests, publishes the MVC project, and uploads
 
 197
-00:11:45,629 --> 00:11:49,998
+00:10:33,352 --> 00:10:36,424
 the publish output as an artifact.
 
 198
-00:11:49,998 --> 00:11:53,640
+00:10:36,424 --> 00:10:38,710
 The latest run is green.
 
 199
-00:11:53,640 --> 00:11:57,793
+00:10:40,010 --> 00:10:45,040
 That is Part 3: an MVC application that consumes
 
 200
-00:11:57,793 --> 00:12:01,024
+00:10:45,040 --> 00:10:48,670
 the Part 2 API, with session-based authentication,
 
 201
-00:12:01,024 --> 00:12:02,870
+00:10:48,670 --> 00:10:50,835
 role-based navigation, complete participant
 
 202
-00:12:02,870 --> 00:12:05,640
+00:10:50,835 --> 00:10:54,083
 and organiser journeys, Azure Blob Storage
 
 203
-00:12:05,640 --> 00:12:09,793
+00:10:54,083 --> 00:10:59,610
 behind the API, and a Docker and CI pipeline.
 
 204
-00:12:09,793 --> 00:12:11,640
+00:10:59,610 --> 00:11:01,120
 Thank you for watching.
